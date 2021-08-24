@@ -10,6 +10,7 @@
     "build:worker": "esbuild ./worker.ts --bundle --minify --define:process.env.NODE_ENV=\"'production'\" --platform=browser --format=esm --outfile=worker.js",
     "build": "npm run build:remix && npm run build:worker",
     "dev": "remix run",
+    "preinstall": "printf \"${REMIX_TOKEN:+//npm.remix.run/:_authToken=$REMIX_TOKEN}\" >> .npmrc",
     "postinstall": "patch-package",
     "predeploy": "npm run cleanup",
     "preview": "wrangler preview",
