@@ -13,8 +13,6 @@ jobs:
           uses: actions/setup-node@v1
           with:
             node-version: 14.x
-        - name: Checkout code
-          uses: actions/checkout@v2
         - name: Cache dependencies
           uses: actions/cache@v2
           with:
@@ -23,10 +21,14 @@ jobs:
             restore-keys: |
               ${{ runner.OS }}-npm-
               ${{ runner.OS }}-
-        - name: Install dependencies
-          run: npm ci
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - name: Setup Remix auth token
+          run: npm config set //npm.remix.run/:_authToken $REMIX_TOKEN
           env:
             REMIX_TOKEN: ${{ secrets.REMIX_TOKEN }}
+        - name: Install dependencies
+          run: npm ci
         - name: Publish
           run: npx wrangler publish
           env:
