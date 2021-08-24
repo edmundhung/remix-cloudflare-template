@@ -3,6 +3,8 @@ on:
   push:
     branches: main
   repository_dispatch:
+env:
+  REMIX_TOKEN: ${{ secrets.REMIX_TOKEN }}
 jobs:
     deploy:
       name: Deploying on Cloudflare Workers
@@ -25,8 +27,6 @@ jobs:
               ${{ runner.OS }}-
         - name: Install dependencies
           run: npm ci
-          env:
-            REMIX_TOKEN: ${{ secrets.REMIX_TOKEN }}
         - name: Publish
           run: npx wrangler publish
           env:
