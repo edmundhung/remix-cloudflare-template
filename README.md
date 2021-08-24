@@ -1,11 +1,15 @@
 # remix-worker-template
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/edmundhung/remix-worker-template)
-
 > The current template makes use of a non-stable version of Remix (0.17.5) and requires [patches](#patches) to make the build works. It is made just for people who would like to try out this combination until the [official support](https://github.com/remix-run/remix/tree/dev/packages/remix-cloudflare-workers) is ready.
 
 - [Remix Docs](https://docs.remix.run)
 - [Customer Dashboard](https://remix.run/dashboard)
+
+## Give it a try
+
+> The deploy button will guide you through the setup for CF_API_TOKEN and CF_ACCOUNT_ID on the UI. But you are still required to provide the REMIX_TOKEN as a repository secret yourself for the deploy action to work properly.
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/edmundhung/remix-worker-template)
 
 ## Patches
 
