@@ -1,5 +1,7 @@
 # remix-worker-template
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/edmundhung/remix-worker-template)
+
 > The current template makes use of a non-stable version of Remix (0.17.5) and requires [patches](#patches) to make the build works. It is made just for people who would like to try out this combination until the [official support](https://github.com/remix-run/remix/tree/dev/packages/remix-cloudflare-workers) is ready.
 
 - [Remix Docs](https://docs.remix.run)
