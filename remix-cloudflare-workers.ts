@@ -10,7 +10,7 @@ import { installGlobals } from "@remix-run/node";
 installGlobals();
 
 export interface GetLoadContextFunction {
-  (event: FetchEvent): AppLoadContext;
+  (request: Request): AppLoadContext;
 }
 
 // Standard platform-specific `createRequestHandler`
@@ -28,7 +28,7 @@ export function createRequestHandler({
 
   return (request: Request) => {
     let loadContext =
-      typeof getLoadContext === "function" ? getLoadContext(event) : undefined;
+      typeof getLoadContext === "function" ? getLoadContext(request) : undefined;
 
     return handleRequest(request, loadContext);
   };
