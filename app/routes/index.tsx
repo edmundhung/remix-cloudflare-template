@@ -1,7 +1,7 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
 
-import stylesUrl from "../styles/index.css";
+import stylesUrl from "~/styles/index.css";
 
 export let meta: MetaFunction = () => {
   return {
