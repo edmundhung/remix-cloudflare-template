@@ -1,6 +1,6 @@
 import { getAssetFromKV, MethodNotAllowedError, NotFoundError } from "@cloudflare/kv-asset-handler";
-import type { ServerBuild } from "@remix-run/node";
-import { createRequestHandler } from "@remix-run/node";
+import type { ServerBuild } from "remix";
+import { createRequestHandler } from "./remix-cloudflare-workers";
 import build from "./build/index.js";
 
 async function handleAsset(event: FetchEvent): Promise<Response> {
