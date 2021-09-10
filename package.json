@@ -12,7 +12,6 @@
     "dev": "remix run",
     "postinstall": "patch-package && remix setup",
     "prebuild": "npm run cleanup",
-    "preview": "wrangler preview",
     "deploy": "wrangler publish",
     "start": "remix-serve build"
   },
