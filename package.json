@@ -15,6 +15,8 @@
     "dev": "concurrently \"npm:dev:*\"",
     "postinstall": "patch-package && remix setup",
     "prebuild": "npm run cleanup",
+    "test:cypress": "cypress run",
+    "test": "start-server-and-test miniflare http-get://localhost:8787 test:cypress",
     "deploy": "wrangler publish",
     "start": "miniflare"
   },
@@ -42,6 +44,7 @@
     "miniflare": "^1.4.1",
     "patch-package": "^6.4.7",
     "rimraf": "^3.0.2",
+    "start-server-and-test": "^1.14.0",
     "ts-node": "^10.2.1",
     "typescript": "^4.1.2"
   },

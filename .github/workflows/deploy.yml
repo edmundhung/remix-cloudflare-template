@@ -29,6 +29,10 @@ jobs:
             REMIX_TOKEN: ${{ secrets.REMIX_TOKEN }}
         - name: Install dependencies
           run: npm ci
+        - name: Run tests
+          uses: cypress-io/github-action@v2
+          with:
+            start: npm start
         - name: Publish
           run: npx wrangler publish
           env:
