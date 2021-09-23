@@ -7,13 +7,15 @@
   "scripts": {
     "cleanup": "rimraf .cache ./build ./public/build worker.js",
     "build:remix": "SERVER_PLATFORM=browser remix build",
-    "build:worker": "esbuild ./worker.ts --bundle --minify --define:process.env.NODE_ENV=\"'production'\" --platform=browser --format=esm --outfile=worker.js",
+    "build:worker": "NODE_ENV=production ts-node ./build.ts",
     "build": "npm run build:remix && npm run build:worker",
-    "dev": "remix run",
+    "dev": "concurrently \"npm:watch:*\"",
     "postinstall": "patch-package && remix setup",
     "prebuild": "npm run cleanup",
     "deploy": "wrangler publish",
-    "start": "remix-serve build"
+    "watch:miniflare": "miniflare --build-command \"npx ts-node ./build.ts\" --disable-cache --watch",
+    "watch:remix": "SERVER_PLATFORM=browser remix dev",
+    "start": "miniflare"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.1.3",
@@ -32,9 +34,12 @@
     "@remix-run/dev": "^0.18.1",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.4",
+    "concurrently": "^6.2.1",
     "esbuild": "^0.12.22",
+    "miniflare": "^1.4.1",
     "patch-package": "^6.4.7",
     "rimraf": "^3.0.2",
+    "ts-node": "^10.2.1",
     "typescript": "^4.1.2"
   },
   "engines": {
