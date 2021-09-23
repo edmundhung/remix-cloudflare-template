@@ -3,7 +3,7 @@ import type { ServerBuild } from "remix";
 import { createRequestHandler } from "./remix-cloudflare-workers";
 import build from "./build/index.js";
 
-async function handleAsset(event: FetchEvent): Promise<Response> {
+async function handleAsset(event: FetchEvent): Promise<Response | null> {
   try {
     if (process.env.NODE_ENV === 'development') {
       return await getAssetFromKV(event, {
@@ -16,7 +16,7 @@ async function handleAsset(event: FetchEvent): Promise<Response> {
     return await getAssetFromKV(event);
   } catch (error) {
     if (error instanceof MethodNotAllowedError || error instanceof NotFoundError) {
-      return new Response('Not Found', { status: 404 });
+      return null;
     }
 
     throw error;
@@ -29,10 +29,10 @@ function createEventHandler(build: ServerBuild): (event: FetchEvent) => void {
   });
 
   const handleEvent = async (event: FetchEvent): Promise<Response> => {
-    let response = await handleRequest(event.request);
+    let response = await handleAsset(event);
 
-    if (response.status === 404) {
-      response = await handleAsset(event);
+    if (response === null) {
+      response = await handleRequest(event);
     }
 
     return response;

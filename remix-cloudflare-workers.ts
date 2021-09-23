@@ -26,10 +26,10 @@ export function createRequestHandler({
   let platform: ServerPlatform = {};
   let handleRequest = createRemixRequestHandler(build, platform, mode);
 
-  return (request: Request) => {
+  return (event: FetchEvent) => {
     let loadContext =
-      typeof getLoadContext === "function" ? getLoadContext(request) : undefined;
+      typeof getLoadContext === "function" ? getLoadContext(event.request) : undefined;
 
-    return handleRequest(request, loadContext);
+    return handleRequest(event.request, loadContext);
   };
 }
