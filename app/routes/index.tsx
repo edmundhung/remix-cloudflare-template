@@ -1,6 +1,5 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
-import { useLoaderData } from "remix";
-import { Link } from "react-router-dom";
+import { useLoaderData, Link } from "remix";
 
 import stylesUrl from "../styles/index.css";
 

@@ -5,9 +5,9 @@ import {
   Scripts,
   useLoaderData,
   LiveReload,
-  useCatch
+  useCatch,
+  Outlet,
 } from "remix";
-import { Outlet } from "react-router-dom";
 
 import stylesUrl from "./styles/global.css";
 
