@@ -11,7 +11,7 @@
     "build": "npm run build:remix && npm run build:worker",
     "dev:cypress": "cypress open",
     "dev:miniflare": "miniflare --build-command \"npx ts-node ./build.ts\" --disable-cache --watch",
-    "dev:remix": "remix dev",
+    "dev:remix": "remix watch",
     "dev": "concurrently \"npm:dev:*\"",
     "postinstall": "remix setup cloudflare-workers",
     "prebuild": "npm run cleanup",
@@ -22,17 +22,17 @@
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.1.3",
-    "@remix-run/cloudflare-workers": "^0.19.0",
-    "@remix-run/react": "^0.19.0",
+    "@remix-run/cloudflare-workers": "^0.20.1",
+    "@remix-run/react": "^0.20.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-router-dom": "^6.0.0-beta.6",
-    "remix": "^0.19.0"
+    "react-router-dom": "^6.0.0-beta.8",
+    "remix": "^0.20.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^2.2.2",
     "@cloudflare/wrangler": "^1.19.0",
-    "@remix-run/dev": "^0.19.0",
+    "@remix-run/dev": "^0.20.1",
     "@testing-library/cypress": "^8.0.1",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.4",

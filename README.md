@@ -1,6 +1,6 @@
 # remix-worker-template
 
-> The current starter template is based on Remix 0.19.0 and requires no patches anymore.
+> The current starter template is based on Remix 0.20.1.
 
 - [Remix Docs](https://docs.remix.run)
 - [Customer Dashboard](https://remix.run/dashboard)
@@ -19,7 +19,7 @@ To starts your app in development mode, rebuilding assets on file changes, the r
 npm run dev
 ```
 
-This will run your remix app using miniflare in dev mode together with the Cypress test runner opened.
+This will run your remix app in dev mode using miniflare with the Cypress test runner opened.
 
 ## Deployment
 
