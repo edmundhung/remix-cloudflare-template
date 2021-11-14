@@ -1,0 +1,21 @@
+{
+  "include": ["remix.env.d.ts", "remix.worker.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["./build.ts"],
+  "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "strict": true,
+    "types": ["@cloudflare/workers-types"],
+    "paths": {
+      "~/*": ["./app/*"]
+    },
+
+    // Remix takes care of building everything in `remix build`.
+    "noEmit": true
+  }
+}

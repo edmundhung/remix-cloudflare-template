@@ -7,10 +7,10 @@
   "scripts": {
     "cleanup": "rimraf .cache ./build ./public/build worker.js",
     "build:remix": "remix build",
-    "build:worker": "NODE_ENV=production ts-node ./build.ts",
+    "build:worker": "NODE_ENV=production node ./scripts/build.mjs",
     "build": "npm run build:remix && npm run build:worker",
     "dev:cypress": "cypress open",
-    "dev:miniflare": "miniflare --build-command \"npx ts-node ./build.ts\" --disable-cache --watch",
+    "dev:miniflare": "miniflare --build-command \"node ./scripts/build.mjs\" --disable-cache --watch",
     "dev:remix": "remix watch",
     "dev": "concurrently \"npm:dev:*\"",
     "postinstall": "remix setup cloudflare-workers",
