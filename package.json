@@ -17,7 +17,6 @@
     "prebuild": "npm run cleanup",
     "test:cypress": "cypress run",
     "test": "start-server-and-test miniflare http-get://localhost:8787 test:cypress",
-    "deploy": "wrangler publish",
     "start": "miniflare"
   },
   "dependencies": {

@@ -28,7 +28,7 @@ npx wrangler preview
 When confirmed everythings works, deploy the worker with Wrangler using:
 
 ```sh
-npm run deploy
+npx wrangler publish
 ```
 
 ## CI/CD
