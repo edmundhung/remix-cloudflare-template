@@ -1,9 +1,11 @@
 node_modules
 
+# Build
 /.cache
 /build
 /public/build
-
 worker.js
+worker.js.map
 
+# Cypress
 /cypress/videos
