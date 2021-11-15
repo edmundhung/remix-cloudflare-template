@@ -1,4 +1,4 @@
-name = "remix-worker-example"
+name = "template"
 type = "javascript"
 workers_dev = true
 # account_id = "Or specified with process.env.CF_ACCOUNT_ID"
