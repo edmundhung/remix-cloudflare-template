@@ -19,7 +19,8 @@
     "prebuild": "npm run cleanup",
     "test:cypress": "cypress run",
     "test": "start-server-and-test miniflare http-get://localhost:8787 test:cypress",
-    "start": "miniflare"
+    "start": "miniflare",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@remix-run/cloudflare-workers": "^0.20.1",
@@ -40,8 +41,11 @@
     "concurrently": "^6.4.0",
     "cypress": "^8.7.0",
     "esbuild": "^0.13.13",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.0.2",
     "miniflare": "^1.4.1",
     "postcss": "^8.3.11",
+    "prettier": "2.4.1",
     "rimraf": "^3.0.2",
     "start-server-and-test": "^1.14.0",
     "tailwindcss": "^2.2.19",
@@ -50,5 +54,8 @@
   "engines": {
     "node": ">=14"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "lint-staged": {
+    "*.{js,mjs,ts,tsx,css,md,yml}": "prettier --write"
+  }
 }

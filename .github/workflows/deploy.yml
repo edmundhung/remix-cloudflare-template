@@ -4,33 +4,35 @@ on:
     branches: main
   repository_dispatch:
 jobs:
-    deploy:
-      name: Deploying on Cloudflare Workers
-      runs-on: ubuntu-latest
-      timeout-minutes: 30
-      steps:
-        - name: Set up Node
-          uses: actions/setup-node@v1
-          with:
-            node-version: 14.x
-        - name: Cache dependencies
-          uses: actions/cache@v2
-          with:
-            path: ~/.npm
-            key: ${{ runner.OS }}-npm-${{ hashFiles('**/package-lock.json') }}
-            restore-keys: |
-              ${{ runner.OS }}-npm-
-              ${{ runner.OS }}-
-        - name: Checkout code
-          uses: actions/checkout@v2
-        - name: Install dependencies
-          run: npm ci
-        - name: Run tests
-          uses: cypress-io/github-action@v2
-          with:
-            start: npm start
-        - name: Publish
-          run: npx wrangler publish
-          env:
-            CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-            CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+  deploy:
+    name: Deploying on Cloudflare Workers
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-
+            ${{ runner.OS }}-
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm ci
+      - name: Code format check
+        run: npx prettier --check .
+      - name: Run tests
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm start
+      - name: Publish
+        run: npx wrangler publish
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}

@@ -1,9 +1,6 @@
 module.exports = {
   mode: 'jit',
-  purge: [
-    './app/**/*.tsx',
-    './app/**/*.ts',
-  ],
+  purge: ['./app/**/*.tsx', './app/**/*.ts'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
@@ -12,4 +9,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+};

@@ -15,7 +15,7 @@ async function build() {
     format: 'esm',
     metafile: true,
     define: {
-      "process.env.NODE_ENV": `"${mode}"`,
+      'process.env.NODE_ENV': `"${mode}"`,
     },
     outfile,
   });
@@ -28,4 +28,4 @@ async function build() {
   }
 }
 
-build().catch(e => console.error('Unknown error caught during build:', e));
+build().catch((e) => console.error('Unknown error caught during build:', e));
