@@ -56,7 +56,7 @@ export default function App() {
   return (
     <Document>
       <div className="min-h-screen flex flex-col">
-        <header className="flex flex-row sm:px-10 p-5 border-b">
+        <header className="sticky top-0 bg-white drop-shadow-sm flex flex-row sm:px-10 p-5 border-b">
           <h1 className="font-bold flex-grow">remix-worker-template</h1>
           <a
             className="inline-block text-gray-600 hover:text-black transition-colors"
@@ -64,7 +64,7 @@ export default function App() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span class="sr-only">GitHub</span>
+            <span className="sr-only">GitHub</span>
             <svg
               aria-hidden="true"
               focusable="false"
@@ -100,9 +100,11 @@ export function CatchBoundary() {
     case 404:
       return (
         <Document title={`${caught.status} ${caught.statusText}`}>
-          <h1>
-            {caught.status} {caught.statusText}
-          </h1>
+          <div className="min-h-screen py-4 flex flex-col justify-center items-center">
+            <h1>
+              {caught.status} {caught.statusText}
+            </h1>
+          </div>
         </Document>
       );
 
