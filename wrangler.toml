@@ -11,7 +11,7 @@ entry-point = "."
 
 [build]
 command = "npm run build"
-watch_dir = "app"
+watch_dir = "./build/index.js"
 
 [build.upload]
 format="service-worker"
