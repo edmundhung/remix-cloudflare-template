@@ -11,7 +11,7 @@
     "build:worker": "NODE_ENV=production node ./scripts/build.mjs",
     "build": "npm run build:style && npm run build:remix && npm run build:worker",
     "dev:cypress": "cypress open",
-    "dev:miniflare": "miniflare --build-command \"node ./scripts/build.mjs\" --disable-cache --watch",
+    "dev:miniflare": "miniflare --build-command \"node ./scripts/build.mjs\" --no-cache --watch",
     "dev:remix": "remix watch",
     "dev:style": "tailwindcss -o ./app/styles/tailwind.css --watch",
     "dev": "concurrently \"npm:dev:*\"",
@@ -46,7 +46,7 @@
     "eslint-config-remix": "0.0.2",
     "husky": "^7.0.4",
     "lint-staged": "^12.0.2",
-    "miniflare": "^1.4.1",
+    "miniflare": "^2.0.0-rc.1",
     "postcss": "^8.3.11",
     "prettier": "2.4.1",
     "rimraf": "^3.0.2",
@@ -55,7 +55,7 @@
     "typescript": "^4.4.4"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16.7"
   },
   "sideEffects": false,
   "lint-staged": {
