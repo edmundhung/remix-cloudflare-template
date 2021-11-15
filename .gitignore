@@ -4,8 +4,9 @@ node_modules
 /.cache
 /build
 /public/build
-worker.js
-worker.js.map
+/worker.js
+/worker.js.map
+/app/styles/tailwind.css
 
 # Cypress
 /cypress/videos
