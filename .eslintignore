@@ -1,0 +1,6 @@
+/.cache
+/build
+/public/build
+/worker.js
+/worker.js.map
+/app/styles/tailwind.css

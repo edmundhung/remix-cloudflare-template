@@ -27,6 +27,8 @@ jobs:
         run: npm ci
       - name: Code format check
         run: npx prettier --check .
+      - name: Code linting
+        run: npx eslint . --ext .js,.mjs,.ts,.tsx
       - name: Run tests
         uses: cypress-io/github-action@v2
         with:
