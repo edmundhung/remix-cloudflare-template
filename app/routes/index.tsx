@@ -1,4 +1,4 @@
-import type { MetaFunction, LinksFunction, LoaderFunction } from 'remix';
+import { MetaFunction, LinksFunction, LoaderFunction, Form } from 'remix';
 import { useLoaderData } from 'remix';
 
 export let meta: MetaFunction = () => {
@@ -9,13 +9,27 @@ export let meta: MetaFunction = () => {
   };
 };
 
+export let action: ActionFunction = async ({ request, context }) => {
+  const formData = new URLSearchParams(await request.text());
+
+  await context.counter.increment(formData.get('name'));
+
+  return null;
+};
+
 export let links: LinksFunction = () => {
   return [];
 };
 
-export let loader: LoaderFunction = async ({ request }) => {
+export let loader: LoaderFunction = async ({ request, context }) => {
+  const counters = ['🚀', '🗺️', '⚡', '📡'];
+  const counts = await Promise.all(
+    counters.map(async (name) => [name, await context.counter.getCount(name)])
+  );
+
   return {
     message: 'Why Remix on Cloudflare Workers?',
+    counts: Object.fromEntries(counts),
   };
 };
 
@@ -39,27 +53,59 @@ export default function Index() {
 
       <h3 className="mt-10 font-bold">{data.message}</h3>
 
-      <details className="p-2 my-4 border cursor-pointer">
-        <summary>🚀 Blazing fast react app rendered on the edge</summary>
-      </details>
+      <div className="max-w-3xl">
+        <Form method="post">
+          <input type="hidden" name="name" value="🚀" />
+          <button
+            type="submit"
+            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer"
+          >
+            <span className="text-left">
+              Blazing fast react app rendered on the edge
+            </span>
+            <span className="whitespace-nowrap">🚀 {data.counts['🚀']}</span>
+          </button>
+        </Form>
 
-      <details className="p-2 my-4 border cursor-pointer">
-        <summary>
-          🗺️ Showing localized content based on your user Geolocation
-        </summary>
-      </details>
+        <Form method="post">
+          <input type="hidden" name="name" value="🗺️" />
+          <button
+            type="submit"
+            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer"
+          >
+            <span className="text-left">
+              Showing localized content based on your user Geo-location
+            </span>
+            <span className="whitespace-nowrap">🗺️ {data.counts['🗺️']}</span>
+          </button>
+        </Form>
 
-      <details className="p-2 my-4 border cursor-pointer">
-        <summary>
-          ⚡ Customizing the CDN Cache within the worker for best performance
-        </summary>
-      </details>
+        <Form method="post">
+          <input type="hidden" name="name" value="⚡" />
+          <button
+            type="submit"
+            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer"
+          >
+            <span className="text-left">
+              Customizing the CDN Cache within the worker for best performance
+            </span>
+            <span className="whitespace-nowrap">⚡ {data.counts['⚡']}</span>
+          </button>
+        </Form>
 
-      <details className="p-2 my-4 border cursor-pointer">
-        <summary>
-          📡 Serving your data with a low-latency key-value store
-        </summary>
-      </details>
+        <Form method="post">
+          <input type="hidden" name="name" value="📡" />
+          <button
+            type="submit"
+            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer"
+          >
+            <span className="text-left">
+              Serving your data with a low-latency key-value store
+            </span>
+            <span className="whitespace-nowrap">📡 {data.counts['📡']}</span>
+          </button>
+        </Form>
+      </div>
     </div>
   );
 }

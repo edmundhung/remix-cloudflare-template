@@ -17,3 +17,6 @@ watch_dir = "./build/index.js"
 format = "modules"
 dir = "./dist"
 main = "./worker.mjs"
+
+[durable_objects]
+bindings = [{ name = "COUNTER", class_name = "Counter" }]
