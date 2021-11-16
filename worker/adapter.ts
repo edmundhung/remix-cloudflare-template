@@ -12,7 +12,7 @@ import type {
 import { createRequestHandler as createRemixRequestHandler } from '@remix-run/server-runtime';
 
 export interface GetLoadContextFunction {
-  (request: Request, env: any, context: any): AppLoadContext;
+  (request: Request, env: any, ctx: any): AppLoadContext;
 }
 
 export type RequestHandler = ReturnType<typeof createRequestHandler>;
@@ -29,10 +29,10 @@ export function createRequestHandler({
   let platform: ServerPlatform = {};
   let handleRequest = createRemixRequestHandler(build, platform, mode);
 
-  return (request: Request, env: any, context: any) => {
+  return (request: Request, env: any, ctx: any) => {
     let loadContext =
       typeof getLoadContext === 'function'
-        ? getLoadContext(request, env, context)
+        ? getLoadContext(request, env, ctx)
         : undefined;
 
     return handleRequest(request, loadContext);
@@ -50,11 +50,13 @@ export function createAssetHandler({
 }) {
   const assetpath = build.assets.url.split('/').slice(0, -1).join('/');
 
-  return async (request: Request, env: any, context: any) => {
+  return async (request: Request, env: any, ctx: any) => {
     try {
       const event = {
         request,
-        waitUntil: context.waitUntil,
+        waitUntil(promise) {
+          return ctx.waitUntil(promise);
+        },
       };
       const options: KvAssetHandlerOptions = {
         ...kvAssetHandlerOptions,
@@ -77,10 +79,7 @@ export function createAssetHandler({
         .slice(0, -1)
         .join('/');
 
-      if (
-        requestpath.startsWith(assetpath) &&
-        typeof options.cacheControl === 'undefined'
-      ) {
+      if (requestpath.startsWith(assetpath)) {
         options.cacheControl = {
           bypassCache: false,
           edgeTTL: 31536000,
@@ -127,18 +126,17 @@ export function createFetchHandler({
     kvAssetHandlerOptions,
   });
 
-  return async (request: Request, env: any, context: any) => {
+  return async (request: Request, env: any, ctx: any) => {
     try {
-      let response = await handleAsset(request, env, context);
+      let response = await handleAsset(request, env, ctx);
 
       if (!response) {
-        response = await handleRequest(request, env, context);
+        response = await handleRequest(request, env, ctx);
       }
 
       return response;
     } catch (e: any) {
       if (process.env.NODE_ENV === 'development') {
-        console.log('[Error caught]', e);
         return new Response(e.message || e.toString(), {
           status: 500,
         });
