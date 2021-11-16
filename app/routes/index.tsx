@@ -58,7 +58,7 @@ export default function Index() {
           <input type="hidden" name="name" value="🚀" />
           <button
             type="submit"
-            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer"
+            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer hover:border-red-500"
           >
             <span className="text-left">
               Blazing fast react app rendered on the edge
@@ -71,7 +71,7 @@ export default function Index() {
           <input type="hidden" name="name" value="🗺️" />
           <button
             type="submit"
-            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer"
+            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer hover:border-blue-500"
           >
             <span className="text-left">
               Showing localized content based on your user Geo-location
@@ -84,7 +84,7 @@ export default function Index() {
           <input type="hidden" name="name" value="⚡" />
           <button
             type="submit"
-            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer"
+            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer hover:border-yellow-500"
           >
             <span className="text-left">
               Customizing the CDN Cache within the worker for best performance
@@ -97,7 +97,7 @@ export default function Index() {
           <input type="hidden" name="name" value="📡" />
           <button
             type="submit"
-            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer"
+            className="block w-full flex flex-row items-center justify-between p-2 my-4 border cursor-pointer hover:border-purple-500"
           >
             <span className="text-left">
               Serving your data with a low-latency key-value store
