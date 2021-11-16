@@ -15,5 +15,5 @@ watch_dir = "./build/index.js"
 
 [build.upload]
 format = "modules"
-dir = "."
+dir = "./dist"
 main = "./worker.mjs"
