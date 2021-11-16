@@ -7,8 +7,8 @@
   "scripts": {
     "cleanup": "rimraf .cache ./build ./public/build ./app/styles/tailwind.css ./worker.js",
     "build:remix": "remix build",
-    "build:style": "NODE_ENV=production tailwindcss -o ./app/styles/tailwind.css --minify",
-    "build:worker": "NODE_ENV=production node ./scripts/build.mjs",
+    "build:style": "cross-env NODE_ENV=production tailwindcss -o ./app/styles/tailwind.css --minify",
+    "build:worker": "cross-env NODE_ENV=production node ./scripts/build.mjs",
     "build": "npm run build:style && npm run build:remix && npm run build:worker",
     "dev:cypress": "cypress open",
     "dev:miniflare": "miniflare --build-command \"node ./scripts/build.mjs\" --no-cache --watch",
@@ -39,6 +39,7 @@
     "@types/react-dom": "^17.0.11",
     "autoprefixer": "^10.4.0",
     "concurrently": "^6.4.0",
+    "cross-env": "^7.0.3",
     "cypress": "^8.7.0",
     "esbuild": "^0.13.13",
     "eslint": "^8.2.0",
