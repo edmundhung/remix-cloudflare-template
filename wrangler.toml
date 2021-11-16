@@ -1,4 +1,4 @@
-name = "template"
+name = "esmodule-example"
 type = "javascript"
 workers_dev = true
 # account_id = "Or specified with process.env.CF_ACCOUNT_ID"
@@ -14,4 +14,6 @@ command = "npm run build"
 watch_dir = "./build/index.js"
 
 [build.upload]
-format="service-worker"
+format = "modules"
+dir = "."
+main = "./worker.mjs"

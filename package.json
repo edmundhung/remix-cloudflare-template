@@ -23,7 +23,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@remix-run/cloudflare-workers": "^0.21.0",
+    "@cloudflare/kv-asset-handler": "^0.2.0",
     "@remix-run/react": "^0.21.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

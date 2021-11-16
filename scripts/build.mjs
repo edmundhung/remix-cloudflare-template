@@ -5,7 +5,7 @@ async function build() {
 
   console.log(`Building Worker in ${mode} mode`);
 
-  const outfile = 'worker.js';
+  const outfile = 'worker.mjs';
   const startTime = Date.now();
   const result = await esbuild.build({
     entryPoints: ['./worker/index.ts'],
@@ -14,6 +14,7 @@ async function build() {
     sourcemap: mode !== 'production',
     format: 'esm',
     metafile: true,
+    external: ['__STATIC_CONTENT_MANIFEST'],
     define: {
       'process.env.NODE_ENV': `"${mode}"`,
     },
