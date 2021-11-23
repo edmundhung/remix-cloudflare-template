@@ -1,16 +1,27 @@
 import type { LinksFunction, MetaFunction, LoaderFunction } from 'remix';
+import * as React from 'react';
 import {
-  Meta,
+  Link,
   Links,
-  Scripts,
-  useLoaderData,
   LiveReload,
-  useCatch,
+  Meta,
   Outlet,
+  Scripts,
+  ScrollRestoration,
+  useCatch,
+  useLocation,
 } from 'remix';
 
 import stylesUrl from './styles/tailwind.css';
 
+/**
+ * The `links` export is a function that returns an array of objects that map to
+ * the attributes for an HTML `<link>` element. These will load `<link>` tags on
+ * every route in the app, but individual routes can include their own links
+ * that are automatically unloaded when a user navigates away from the route.
+ *
+ * https://remix.run/api/app#links
+ */
 export let links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: stylesUrl }];
 };
@@ -25,6 +36,16 @@ export let loader: LoaderFunction = async () => {
   return { date: new Date() };
 };
 
+export default function App() {
+  return (
+    <Document>
+      <Layout>
+        <Outlet />
+      </Layout>
+    </Document>
+  );
+}
+
 function Document({
   children,
   title,
@@ -36,13 +57,13 @@ function Document({
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <link rel="icon" href="/favicon.png" type="image/png" />
         {title ? <title>{title}</title> : null}
         <Meta />
         <Links />
       </head>
       <body>
         {children}
+        <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === 'development' && <LiveReload />}
       </body>
@@ -50,82 +71,104 @@ function Document({
   );
 }
 
-export default function App() {
-  let data = useLoaderData();
-
+function Layout({ children }: React.PropsWithChildren<{}>) {
   return (
-    <Document>
-      <div className="min-h-screen flex flex-col">
-        <header className="sticky top-0 bg-white drop-shadow-sm flex flex-row sm:px-10 p-5 border-b">
-          <h1 className="font-bold flex-grow">remix-worker-template</h1>
-          <a
-            className="inline-block text-gray-600 hover:text-black transition-colors"
-            href="https://github.com/edmundhung/remix-worker-template"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="sr-only">GitHub</span>
-            <svg
-              aria-hidden="true"
-              focusable="false"
-              data-prefix="fab"
-              data-icon="github"
-              className="w-6 h-6"
-              role="img"
-              viewBox="0 0 496 512"
-            >
-              <path
-                fill="currentColor"
-                d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"
-              ></path>
-            </svg>
-          </a>
-        </header>
-        <main className="sm:px-10 p-5 flex-grow">
-          <Outlet />
-        </main>
-        <footer className="sm:px-10 p-5">
-          <p>This page was rendered at {data.date.toLocaleString()}</p>
-        </footer>
-      </div>
-    </Document>
+    <div className="min-h-screen flex flex-col">
+      <header className="sticky top-0 bg-white sm:px-10 p-5 border-b">
+        <Link to="/" title="Remix" className="remix-app__header-home-link">
+          <RemixLogo />
+        </Link>
+      </header>
+      <main className="flex-grow">{children}</main>
+      <footer className="sm:px-10 p-5">
+        Wanna know more about Remix? Check out{' '}
+        <a
+          className="underline"
+          href="https://remix.guide"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Remix Guide
+        </a>
+      </footer>
+    </div>
   );
 }
 
 export function CatchBoundary() {
   let caught = useCatch();
 
+  let message;
   switch (caught.status) {
     case 401:
-    case 404:
-      return (
-        <Document title={`${caught.status} ${caught.statusText}`}>
-          <div className="min-h-screen py-4 flex flex-col justify-center items-center">
-            <h1>
-              {caught.status} {caught.statusText}
-            </h1>
-          </div>
-        </Document>
+      message = (
+        <p>
+          Oops! Looks like you tried to visit a page that you do not have access
+          to.
+        </p>
       );
+      break;
+    case 404:
+      message = (
+        <p>Oops! Looks like you tried to visit a page that does not exist.</p>
+      );
+      break;
 
     default:
-      throw new Error(
-        `Unexpected caught response with status: ${caught.status}`
-      );
+      throw new Error(caught.data || caught.statusText);
   }
+
+  return (
+    <Document title={`${caught.status} ${caught.statusText}`}>
+      <Layout>
+        <h1>
+          {caught.status}: {caught.statusText}
+        </h1>
+        {message}
+      </Layout>
+    </Document>
+  );
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
-
   return (
-    <Document title="Uh-oh!">
-      <h1>App Error</h1>
-      <pre>{error.message}</pre>
-      <p>
-        Replace this UI with what you want users to see when your app throws
-        uncaught errors.
-      </p>
+    <Document title="Error!">
+      <Layout>
+        <div>
+          <h1>There was an error</h1>
+          <p>{error.message}</p>
+          <hr />
+          <p>
+            Hey, developer, you should replace this with what you want your
+            users to see.
+          </p>
+        </div>
+      </Layout>
     </Document>
+  );
+}
+
+function RemixLogo(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg
+      viewBox="0 0 659 165"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      aria-labelledby="remix-run-logo-title"
+      role="img"
+      width="106"
+      height="30"
+      fill="currentColor"
+      {...props}
+    >
+      <title id="remix-run-logo-title">Remix Logo</title>
+      <path d="M0 161V136H45.5416C53.1486 136 54.8003 141.638 54.8003 145V161H0Z M133.85 124.16C135.3 142.762 135.3 151.482 135.3 161H92.2283C92.2283 158.927 92.2653 157.03 92.3028 155.107C92.4195 149.128 92.5411 142.894 91.5717 130.304C90.2905 111.872 82.3473 107.776 67.7419 107.776H54.8021H0V74.24H69.7918C88.2407 74.24 97.4651 68.632 97.4651 53.784C97.4651 40.728 88.2407 32.816 69.7918 32.816H0V0H77.4788C119.245 0 140 19.712 140 51.2C140 74.752 125.395 90.112 105.665 92.672C122.32 96 132.057 105.472 133.85 124.16Z" />
+      <path d="M229.43 120.576C225.59 129.536 218.422 133.376 207.158 133.376C194.614 133.376 184.374 126.72 183.35 112.64H263.478V101.12C263.478 70.1437 243.254 44.0317 205.11 44.0317C169.526 44.0317 142.902 69.8877 142.902 105.984C142.902 142.336 169.014 164.352 205.622 164.352C235.83 164.352 256.822 149.76 262.71 123.648L229.43 120.576ZM183.862 92.6717C185.398 81.9197 191.286 73.7277 204.598 73.7277C216.886 73.7277 223.542 82.4317 224.054 92.6717H183.862Z" />
+      <path d="M385.256 66.5597C380.392 53.2477 369.896 44.0317 349.672 44.0317C332.52 44.0317 320.232 51.7117 314.088 64.2557V47.1037H272.616V161.28H314.088V105.216C314.088 88.0638 318.952 76.7997 332.52 76.7997C345.064 76.7997 348.136 84.9917 348.136 100.608V161.28H389.608V105.216C389.608 88.0638 394.216 76.7997 408.04 76.7997C420.584 76.7997 423.4 84.9917 423.4 100.608V161.28H464.872V89.5997C464.872 65.7917 455.656 44.0317 424.168 44.0317C404.968 44.0317 391.4 53.7597 385.256 66.5597Z" />
+      <path d="M478.436 47.104V161.28H519.908V47.104H478.436ZM478.18 36.352H520.164V0H478.18V36.352Z" />
+      <path d="M654.54 47.1035H611.788L592.332 74.2395L573.388 47.1035H527.564L568.78 103.168L523.98 161.28H566.732L589.516 130.304L612.3 161.28H658.124L613.068 101.376L654.54 47.1035Z" />
+    </svg>
   );
 }

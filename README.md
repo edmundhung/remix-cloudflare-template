@@ -2,10 +2,10 @@
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/edmundhung/remix-worker-template)
 
-> The current starter template is based on Remix 0.21.0
+> The current starter template is based on Remix 1.0.4
 
-- [Remix Docs](https://docs.remix.run)
-- [Customer Dashboard](https://remix.run/dashboard)
+- [Repository](https://github.com/remix-run/remix)
+- [Remix Docs](https://remix.run/docs)
 
 ## Differences with the Remix CF Workers template
 

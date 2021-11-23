@@ -2,8 +2,7 @@
   "private": true,
   "name": "remix-worker-template",
   "main": "./worker.js",
-  "description": "Template repository for getting your Remix app up on Cloudflare Workers",
-  "license": "MIT",
+  "description": "All-in-one remix starter template for Cloudflare Workers",
   "scripts": {
     "cleanup": "rimraf .cache ./build ./public/build ./app/styles/tailwind.css ./worker.js",
     "build:remix": "remix build",
@@ -17,23 +16,22 @@
     "dev": "concurrently \"npm:dev:*\"",
     "postinstall": "remix setup cloudflare-workers",
     "prebuild": "npm run cleanup",
-    "test:cypress": "cypress run",
-    "test": "start-server-and-test miniflare http-get://localhost:8787 test:cypress",
+    "test": "cypress run",
+    "ci": "start-server-and-test http-get://localhost:8787",
     "start": "miniflare",
     "prepare": "husky install"
   },
   "dependencies": {
-    "@remix-run/cloudflare-workers": "^0.21.0",
-    "@remix-run/react": "^0.21.0",
+    "@remix-run/cloudflare-workers": "^1.0.4",
+    "@remix-run/react": "^1.0.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-router-dom": "^6.0.2",
-    "remix": "^0.21.0"
+    "remix": "^1.0.4"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.1.1",
     "@cloudflare/wrangler": "^1.19.5",
-    "@remix-run/dev": "^0.21.0",
+    "@remix-run/dev": "^1.0.4",
     "@testing-library/cypress": "^8.0.2",
     "@types/react": "^17.0.34",
     "@types/react-dom": "^17.0.11",
