@@ -3,9 +3,7 @@ describe('Index', () => {
     cy.visit('/');
   });
 
-  it('should show the loader message', () => {
-    cy.findByText('Why Remix on Cloudflare Workers?', { exact: false }).should(
-      'exist'
-    );
+  it('should show the package name', () => {
+    cy.findAllByText('remix-worker-template', { exact: false }).should('exist');
   });
 });
