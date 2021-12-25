@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "remix-worker-template",
-  "main": "./worker.js",
+  "main": "./dist/worker.mjs",
   "description": "All-in-one remix starter template for Cloudflare Workers",
   "scripts": {
     "cleanup": "rimraf .cache ./build ./public/build ./app/styles/tailwind.css ./worker.js",
@@ -10,14 +10,14 @@
     "build:worker": "cross-env NODE_ENV=production node ./scripts/build.mjs",
     "build": "npm run build:style && npm run build:remix && npm run build:worker",
     "dev:cypress": "cypress open",
-    "dev:miniflare": "miniflare --build-command \"node ./scripts/build.mjs\" --no-cache --watch",
+    "dev:miniflare": "miniflare --build-command \"node ./scripts/build.mjs\" --build-watch-path ./worker --no-cache --watch --open",
     "dev:remix": "remix watch",
     "dev:style": "tailwindcss -o ./app/styles/tailwind.css --watch",
     "dev": "concurrently \"npm:dev:*\"",
     "postinstall": "remix setup cloudflare-workers",
     "prebuild": "npm run cleanup",
-    "test": "cypress run",
-    "ci": "start-server-and-test http-get://localhost:8787",
+    "test:cypress": "cypress run",
+    "test": "start-server-and-test http-get://localhost:8787 test:cypress",
     "start": "miniflare",
     "prepare": "husky install"
   },

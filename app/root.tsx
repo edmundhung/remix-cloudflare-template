@@ -9,7 +9,6 @@ import {
   Scripts,
   ScrollRestoration,
   useCatch,
-  useLocation,
 } from 'remix';
 
 import stylesUrl from './styles/tailwind.css';

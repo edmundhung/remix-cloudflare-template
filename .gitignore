@@ -1,13 +1,20 @@
 node_modules
 
-# Build
+# Remix
 /.cache
 /build
 /public/build
-/worker.js
-/worker.js.map
+
+# Custom Build
+/dist
+
+# Tailwind
 /app/styles/tailwind.css
 
 # Cypress
 /cypress/videos
 /cypress/screenshots
+
+# Miniflare
+/.mf
+/.env
