@@ -4,7 +4,7 @@
   "main": "./dist/worker.mjs",
   "description": "All-in-one remix starter template for Cloudflare Workers",
   "scripts": {
-    "cleanup": "rimraf .cache ./build ./public/build ./app/styles/tailwind.css ./worker.js",
+    "cleanup": "rimraf .cache ./dist ./build ./public/build ./app/styles/tailwind.css",
     "build:remix": "remix build",
     "build:style": "cross-env NODE_ENV=production tailwindcss -o ./app/styles/tailwind.css --minify",
     "build:worker": "cross-env NODE_ENV=production node ./scripts/build.mjs",
