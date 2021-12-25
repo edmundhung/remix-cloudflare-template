@@ -2,7 +2,7 @@
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/edmundhung/remix-worker-template)
 
-> The current starter template is based on Remix 1.0.4
+> The current starter template is based on Remix 1.1.1
 
 - [Repository](https://github.com/remix-run/remix)
 - [Remix Docs](https://remix.run/docs)
