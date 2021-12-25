@@ -14,4 +14,6 @@ command = "npm run build"
 watch_dir = "./build/index.js"
 
 [build.upload]
-format="service-worker"
+format = "modules"
+dir = "./dist"
+main = "./worker.mjs"

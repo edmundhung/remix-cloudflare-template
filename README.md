@@ -7,7 +7,7 @@
 - [Repository](https://github.com/remix-run/remix)
 - [Remix Docs](https://remix.run/docs)
 
-## Differences with the Remix CF Workers template
+## Differences with the Official CF Workers template
 
 While the official template provides the bare minimums for you to kickstart a Remix app running on Cloudflare Workers, this starter template adds a few extra tools that are common for development and let you be productive right away. These tools include:
 
@@ -15,6 +15,8 @@ While the official template provides the bare minimums for you to kickstart a Re
 - ESLint
 - Prettier
 - Cypress
+
+In addition, it is now setup using a custom adapter based on the official **Cloudflare Pages adapter**. This allows us running a module worker with supports of `Durable Objects`. This is a temporay workaround until an official update is landed on the CF Worker adapter.
 
 ## Node Version
 
