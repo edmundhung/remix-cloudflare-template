@@ -10,7 +10,7 @@
     "build:worker": "cross-env NODE_ENV=production VERSION=$(git rev-parse --short HEAD) node ./scripts/build.mjs",
     "build": "npm run build:style && npm run build:remix && npm run build:worker",
     "dev:cypress": "cypress open",
-    "dev:miniflare": "miniflare --build-command \"node ./scripts/build.mjs\" --build-watch-path ./worker --no-cache --watch --open",
+    "dev:miniflare": "miniflare --build-command \"node ./scripts/build.mjs\" --build-watch-path ./worker --build-watch-path ./build/index.js --no-cache --watch --open",
     "dev:remix": "remix watch",
     "dev:style": "tailwindcss -o ./app/styles/tailwind.css --watch",
     "dev": "concurrently \"npm:dev:*\"",
