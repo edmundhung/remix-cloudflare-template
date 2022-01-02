@@ -12,9 +12,9 @@
 While the official template provides the bare minimums for you to kickstart a Remix app running on Cloudflare Workers, this starter template adds a few extra tools that are common for development and let you be productive right away. These tools include:
 
 - Tailwind
+- Playwright
 - ESLint
 - Prettier
-- Cypress
 
 In addition, it is now setup using a custom adapter based on the official **Cloudflare Pages adapter**. This allows us running a module worker with supports of `Durable Objects`. This is a temporay workaround until an official update is landed on the CF Worker adapter.
 
@@ -36,17 +36,19 @@ To starts your app in development mode, rebuilding assets on file changes, the r
 npm run dev
 ```
 
-This will run your remix app in dev mode using miniflare with the Cypress test runner opened.
+This will run your remix app in dev mode using miniflare.
+
+## Testing
+
+Before running the tests, please ensure the worker is built:
+
+```sh
+npm run build && npm run test
+```
 
 ## Deployment
 
-First, preview your app with:
-
-```sh
-npx wrangler preview
-```
-
-When confirmed everythings works, deploy the worker with Wrangler using:
+To deploy your Remix app, simply do it with Wrangler using:
 
 ```sh
 npx wrangler publish
@@ -54,9 +56,9 @@ npx wrangler publish
 
 ## CI/CD
 
-The template ships a basic [deploy workflow](./.github/workflows/deploy.yml) which is triggered when new changes are pushed to the `main` branch.
+The template ships a [development workflow](./.github/workflows/development.yml) which is triggered whenever new changes are pushed.
 
-To setup the CI environment, following variables are required:
+To allow GitHub deploying the worker for you, following variables are required:
 
 - CF_API_TOKEN
 - CF_ACCOUNT_ID
