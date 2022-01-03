@@ -1,6 +1,8 @@
 /.cache
+/.github
+/.husky
 /build
-/public/build
-/worker.js
-/worker.js.map
+/public
+/node_modules
+/dist
 /app/styles/tailwind.css
