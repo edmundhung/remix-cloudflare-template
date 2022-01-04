@@ -1,2 +1,2 @@
 /// <reference types="@remix-run/dev" />
-/// <reference types="@remix-run/cloudflare-workers/globals" />
+/// <reference types="@remix-run/cloudflare-pages/globals" />
