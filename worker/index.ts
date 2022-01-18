@@ -12,16 +12,6 @@ const handleFetch = createFetchHandler({
   build,
 
   /**
-   * Optional: Setup Cache for the responses from Remix
-   * No cache will be set if the function is not defined
-   * or if the function returns undefined or null
-   * @returns Cache
-   */
-  getCache() {
-    return caches.open(process.env.VERSION);
-  },
-
-  /**
    * Optional: Context to be available on `loader` or `action`, default to `undefined` if not defined
    * @param request Request
    * @param env Variables defined for the environment
@@ -38,6 +28,12 @@ const handleFetch = createFetchHandler({
    * 2) Call `createPageAssetHandler()` when using Pages
    */
   handleAsset: createWorkerAssetHandler(build),
+
+  /**
+   * Optional: Enable cache for response from the Remix request handler, no cache by default
+   * Experimental feature - Let me know if you run into problems with cache enabled
+   */
+  enableCache: false,
 });
 
 const worker: ExportedHandler = {

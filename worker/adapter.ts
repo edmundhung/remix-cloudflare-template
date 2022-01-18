@@ -48,19 +48,19 @@ export function createRequestHandler<Env>({
 
 export function createFetchHandler<Env>({
   build,
-  getCache,
   getLoadContext,
   handleAsset,
+  enableCache,
   mode,
 }: {
   build: ServerBuild;
-  getCache?: () => Promise<Cache>;
   getLoadContext?: GetLoadContextFunction<Env>;
   handleAsset: (
     request: Request,
     env: Env,
     ctx: ExecutionContext
   ) => Promise<Response>;
+  enableCache?: boolean;
   mode?: string;
 }): ExportedHandlerFetchHandler<Env> {
   const handleRequest = createRequestHandler<Env>({
@@ -73,14 +73,14 @@ export function createFetchHandler<Env>({
     try {
       let isHeadOrGetRequest =
         request.method === 'HEAD' || request.method === 'GET';
-      let cache = await getCache?.();
+      let cache = enableCache ? await caches.open(build.assets.version) : null;
       let response: Response | undefined;
 
       if (isHeadOrGetRequest) {
         response = await handleAsset(request.clone(), env, ctx);
       }
 
-      if (response?.ok) {
+      if (response && response.status >= 200 && response.status < 400) {
         return response;
       }
 
@@ -89,11 +89,11 @@ export function createFetchHandler<Env>({
       }
 
       if (!response || !response.ok) {
-        response = await handleRequest(request, env, ctx);
-      }
+        response = await handleRequest(request.clone(), env, ctx);
 
-      if (cache && isHeadOrGetRequest && response.ok) {
-        ctx.waitUntil(cache?.put(request, response.clone()));
+        if (cache && isHeadOrGetRequest && response.ok) {
+          ctx.waitUntil(cache?.put(request, response.clone()));
+        }
       }
 
       return response;
