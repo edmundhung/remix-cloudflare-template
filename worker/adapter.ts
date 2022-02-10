@@ -117,6 +117,33 @@ export function createWorkerAssetHandler(build: ServerBuild) {
     env: Env,
     ctx: ExecutionContext
   ): Promise<Response> {
+    async function getAssetManifest(cache: Cache) {
+      const nextAssetManifest = JSON.parse(manifest);
+
+      try {
+        const manifestCache = new Request('http://worker.localhost/');
+        const response = await cache.match(manifestCache);
+        const prevAssetManifest = await response?.json<Record<string, any>>();
+        const assetManifest = {
+          ...prevAssetManifest,
+          ...nextAssetManifest,
+        };
+
+        ctx.waitUntil(
+          cache.put(
+            manifestCache,
+            new Response(assetManifest, {
+              headers: { 'cache-control': 'max-age=31536000' },
+            })
+          )
+        );
+
+        return assetManifest;
+      } catch {
+        return nextAssetManifest;
+      }
+    }
+
     try {
       const event = {
         request,
@@ -126,7 +153,7 @@ export function createWorkerAssetHandler(build: ServerBuild) {
       };
       const options: Partial<KvAssetHandlerOptions> = {
         ASSET_NAMESPACE: (env as any).__STATIC_CONTENT,
-        ASSET_MANIFEST: JSON.parse(manifest),
+        ASSET_MANIFEST: await getAssetManifest(caches.default),
       };
 
       const assetpath = build.assets.url.split('/').slice(0, -1).join('/');
