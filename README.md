@@ -2,7 +2,7 @@
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/edmundhung/remix-worker-template)
 
-> The current starter template is based on Remix 1.1.3
+> The current starter template is based on Remix 1.2.3
 
 - [Repository](https://github.com/remix-run/remix)
 - [Remix Docs](https://remix.run/docs)
@@ -16,7 +16,7 @@ While the official template provides the bare minimums for you to kickstart a Re
 - ESLint
 - Prettier
 
-In addition, it is now setup using a custom adapter based on the official **Cloudflare Pages adapter**. This allows us running a module worker with supports of `Durable Objects`. This is a temporay workaround until an official update is landed on the CF Worker adapter.
+In addition, it is now setup using a custom adapter based on the official **Cloudflare Pages adapter**. This allows us running a [module worker](https://developers.cloudflare.com/workers/learning/migrating-to-module-workers/) with supports of `Durable Objects`. This is a temporay workaround until an official update is landed on the CF Worker adapter.
 
 ## Node Version
 
