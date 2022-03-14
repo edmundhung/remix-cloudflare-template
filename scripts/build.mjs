@@ -19,6 +19,7 @@ async function build() {
     define: {
       'process.env.NODE_ENV': `"${mode}"`,
       'process.env.VERSION': `"${version}"`,
+      'process.env.REMIX_DEV_SERVER_WS_PORT': `""`,
     },
     outfile,
   });
