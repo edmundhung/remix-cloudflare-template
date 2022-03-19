@@ -1,7 +1,9 @@
 import * as esbuild from 'esbuild';
 
 async function build() {
+  // eslint-disable-next-line no-undef
   const mode = process.env.NODE_ENV?.toLowerCase() ?? 'development';
+  // eslint-disable-next-line no-undef
   const version = process.env.VERSION ?? new Date().toISOString();
 
   console.log(`Building Worker in ${mode} mode for version ${version}`);
