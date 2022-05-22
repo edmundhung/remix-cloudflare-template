@@ -1,6 +1,6 @@
 import ReactDOMServer from 'react-dom/server';
-import type { EntryContext } from 'remix';
-import { RemixServer } from 'remix';
+import type { EntryContext } from '@remix-run/cloudflare';
+import { RemixServer } from '@remix-run/react';
 
 export default function handleRequest(
   request: Request,

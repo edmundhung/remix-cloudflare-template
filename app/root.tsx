@@ -1,4 +1,8 @@
-import type { LinksFunction, MetaFunction, LoaderFunction } from 'remix';
+import type {
+  LinksFunction,
+  MetaFunction,
+  LoaderFunction,
+} from '@remix-run/cloudflare';
 import * as React from 'react';
 import {
   Link,
@@ -9,9 +13,9 @@ import {
   Scripts,
   ScrollRestoration,
   useCatch,
-} from 'remix';
+} from '@remix-run/react';
 
-import stylesUrl from './styles/tailwind.css';
+import stylesUrl from '~/styles/tailwind.css';
 
 /**
  * The `links` export is a function that returns an array of objects that map to

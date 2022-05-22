@@ -1,5 +1,9 @@
-import type { MetaFunction, LinksFunction, LoaderFunction } from 'remix';
-import { useLoaderData } from 'remix';
+import type {
+  MetaFunction,
+  LinksFunction,
+  LoaderFunction,
+} from '@remix-run/cloudflare';
+import { useLoaderData } from '@remix-run/react';
 
 export let meta: MetaFunction = () => {
   return {
