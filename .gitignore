@@ -5,6 +5,9 @@ node_modules
 /build
 /public/build
 
+# Remix stacks
+/package-lock.json
+
 # Custom Build
 /dist
 
