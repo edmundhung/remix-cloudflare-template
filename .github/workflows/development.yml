@@ -3,80 +3,68 @@ on:
   - push
 jobs:
   test:
-    name: Testing
+    name: 🔍 Testing
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node
-        uses: actions/setup-node@v1
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-      - name: Cache dependencies
-        uses: actions/cache@v2
+          node-version: 16
+      - name: 📥 Download deps
+        uses: bahmutov/npm-install@v1
         with:
-          path: ~/.npm
-          key: ${{ runner.OS }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-npm-
-            ${{ runner.OS }}-
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install dependencies
-        run: npm ci
-      - name: Install Playwright
+          useLockFile: false
+      - name: 🎭 Install Playwright
         run: npx playwright install --with-deps
-      - name: Build the worker
+      - name: 📦 Build the worker
         run: npm run build
-      - name: Run some tests
+      - name: 💣 Run some tests
         run: npm run test
 
   lint:
-    name: Linting
+    name: ⬣ Linting
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node
-        uses: actions/setup-node@v1
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-      - name: Cache dependencies
-        uses: actions/cache@v2
+          node-version: 16
+      - name: 📥 Download deps
+        uses: bahmutov/npm-install@v1
         with:
-          path: ~/.npm
-          key: ${{ runner.OS }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-npm-
-            ${{ runner.OS }}-
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install dependencies
-        run: npm ci
-      - name: Code format check
+          useLockFile: false
+      - name: ✨ Code format check
         run: npx prettier --check .
-      - name: Code linting
+      - name: ✅ Code linting
         run: npx eslint . --ext .js,.mjs,.ts,.tsx
 
   deploy:
-    name: Deploying
+    name: 🛳 Deploying
     needs: [test, lint]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node
-        uses: actions/setup-node@v1
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-      - name: Cache dependencies
-        uses: actions/cache@v2
+          node-version: 16
+      - name: 📥 Download deps
+        uses: bahmutov/npm-install@v1
         with:
-          path: ~/.npm
-          key: ${{ runner.OS }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-npm-
-            ${{ runner.OS }}-
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install dependencies
-        run: npm ci
-      - name: Publish
+          useLockFile: false
+      - name: 🔥 Publish
         run: npx wrangler publish
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
