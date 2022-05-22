@@ -1,22 +1,23 @@
 # remix-worker-template
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/edmundhung/remix-worker-template)
-
 > The current starter template is based on Remix 1.5.1
 
-- [Repository](https://github.com/remix-run/remix)
-- [Remix Docs](https://remix.run/docs)
+Learn more about [Remix Stacks](https://remix.run/stacks).
 
-## Differences with the Official CF Workers template
+```
+npx create-remix --template edmundhung/remix-worker-template
+```
 
-While the official template provides the bare minimums for you to kickstart a Remix app running on Cloudflare Workers, this starter template adds a few extra tools that are common for development and let you be productive right away. These tools include:
+What's included?
 
-- Tailwind
-- Playwright
-- ESLint
-- Prettier
-
-In addition, it is now setup using a custom adapter based on the official **Cloudflare Pages adapter**. This allows us running a [module worker](https://developers.cloudflare.com/workers/learning/migrating-to-module-workers/) with supports of `Durable Objects`. This is a temporay workaround until an official update is landed on the CF Worker adapter.
+- Deploying to [Cloudflare Workers](https://workers.cloudflare.com/)
+- Supporting [Durable objects](https://developers.cloudflare.com/workers/learning/using-durable-objects) with [module workers](https://developers.cloudflare.com/workers/learning/migrating-to-module-workers/)
+- CI/CD through [Github Actions](https://github.com/features/actions)
+- Styling with [Tailwind](https://tailwindcss.com/)
+- Testing with [Playwright](playwright.dev/) with _undici_ mocking support
+- Code formatting with [Prettier](https://prettier.io)
+- Linting with [ESLint](https://eslint.org)
+- Static Types with [TypeScript](https://typescriptlang.org)
 
 ## Node Version
 
@@ -63,6 +64,4 @@ To allow GitHub deploying the worker for you, following variables are required:
 - CF_API_TOKEN
 - CF_ACCOUNT_ID
 
-These values could be found / created on your Cloudflare Dashboard. If your project is bootstrapped with the deploy button above, both should be already set in the repository.
-
-Alternatively, **CF_ACCOUNT_ID** can be set as `account_id` on the [wrangler.toml](./wrangler.toml).
+These values could be found / created on your Cloudflare Dashboard

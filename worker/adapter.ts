@@ -1,13 +1,9 @@
 // Required for installGlobals();
-import '@remix-run/cloudflare-pages';
+import '@remix-run/cloudflare-workers';
 
 // Required for custom adapters
-import type {
-  AppLoadContext,
-  ServerBuild,
-  ServerPlatform,
-} from '@remix-run/server-runtime';
-import { createRequestHandler as createRemixRequestHandler } from '@remix-run/server-runtime';
+import type { AppLoadContext, ServerBuild } from '@remix-run/cloudflare';
+import { createRequestHandler as createRemixRequestHandler } from '@remix-run/cloudflare';
 
 // Required only for Worker Site
 import type { Options as KvAssetHandlerOptions } from '@cloudflare/kv-asset-handler';
@@ -16,6 +12,8 @@ import {
   MethodNotAllowedError,
   NotFoundError,
 } from '@cloudflare/kv-asset-handler';
+
+// @ts-expect-error External JSON only available on CF runtime / Miniflare
 import manifest from '__STATIC_CONTENT_MANIFEST';
 
 export interface GetLoadContextFunction<Env = unknown> {
@@ -33,8 +31,7 @@ export function createRequestHandler<Env>({
   getLoadContext?: GetLoadContextFunction<Env>;
   mode?: string;
 }): ExportedHandlerFetchHandler<Env> {
-  let platform: ServerPlatform = {};
-  let handleRequest = createRemixRequestHandler(build, platform, mode);
+  let handleRequest = createRemixRequestHandler(build, mode);
 
   return (request: Request, env: Env, ctx: ExecutionContext) => {
     let loadContext =
@@ -78,35 +75,37 @@ export function createFetchHandler<Env>({
 
       if (isHeadOrGetRequest) {
         response = await handleAsset(request.clone(), env, ctx);
-      }
 
-      if (response && response.status >= 200 && response.status < 400) {
-        return response;
+        if (response.status >= 200 && response.status < 400) {
+          return response;
+        }
       }
 
       if (cache && isHeadOrGetRequest) {
         response = await cache?.match(request);
+
+        if (response) {
+          return response;
+        }
       }
 
-      if (!response || !response.ok) {
-        response = await handleRequest(request.clone(), env, ctx);
+      response = await handleRequest(request.clone(), env, ctx);
 
-        if (cache && isHeadOrGetRequest && response.ok) {
-          ctx.waitUntil(cache?.put(request, response.clone()));
-        }
+      if (cache && isHeadOrGetRequest && response.ok) {
+        ctx.waitUntil(cache?.put(request, response.clone()));
       }
 
       return response;
     } catch (e: any) {
       console.log('Error caught', e.message, e);
 
-      if (process.env.NODE_ENV === 'development' && e instanceof Error) {
-        return new Response(e.message || e.toString(), {
+      if (process.env.NODE_ENV === 'development') {
+        return new Response(e instanceof Error ? e.message : e.toString(), {
           status: 500,
         });
       }
 
-      return new Response('Internal Error', { status: 500 });
+      return new Response('Internal Server Error', { status: 500 });
     }
   };
 }
