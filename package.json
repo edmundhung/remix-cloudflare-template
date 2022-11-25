@@ -22,8 +22,9 @@
     "@cloudflare/kv-asset-handler": "^0.2.0",
     "@remix-run/cloudflare-workers": "*",
     "@remix-run/react": "*",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "isbot": "^3.6.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.18.0",
@@ -31,8 +32,8 @@
     "@playwright/test": "^1.28.1",
     "@remix-run/dev": "*",
     "@remix-run/eslint-config": "*",
-    "@types/react": "^17.0.41",
-    "@types/react-dom": "^17.0.14",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
     "concurrently": "^7.6.0",
     "cross-env": "^7.0.3",
     "esbuild": "^0.15.15",

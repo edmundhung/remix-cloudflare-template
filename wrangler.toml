@@ -4,6 +4,7 @@ workers_dev = true
 # account_id = "Or specified with process.env.CF_ACCOUNT_ID"
 # zone_id = "Or specified with process.env.CF_ZONE_ID"
 # route = "example.com/*"
+compatibility_flags = ["streams_enable_constructors"]
 
 [site]
 bucket = "./public"
