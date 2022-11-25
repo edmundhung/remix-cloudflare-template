@@ -1,7 +1,5 @@
 # remix-worker-template
 
-> The current starter template is based on Remix 1.5.1
-
 Learn more about [Remix Stacks](https://remix.run/stacks).
 
 ```
