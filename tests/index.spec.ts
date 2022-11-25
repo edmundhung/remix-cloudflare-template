@@ -7,12 +7,12 @@ test.beforeEach(async ({ page }) => {
 /**
  * You can interact with the page or browser through the page / queries
  */
-test('if the page shows the package name', async ({ queries }) => {
-  const elements = await queries.queryAllByText('remix-worker-template', {
+test('if the page shows the package name', async ({ page }) => {
+  const title = page.getByText('remix-worker-template', {
     exact: false,
   });
 
-  expect(elements).toBeTruthy();
+  await expect(title).toBeVisible();
 });
 
 /**

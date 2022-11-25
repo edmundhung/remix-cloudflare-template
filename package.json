@@ -28,8 +28,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^3.11.0",
     "@cloudflare/wrangler": "^1.19.12",
-    "@playwright-testing-library/test": "^4.2.1",
-    "@playwright/test": "^1.22.2",
+    "@playwright/test": "^1.28.1",
     "@remix-run/dev": "*",
     "@remix-run/eslint-config": "*",
     "@types/react": "^17.0.41",

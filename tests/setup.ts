@@ -1,12 +1,8 @@
 import { test as base, expect } from '@playwright/test';
-import {
-  fixtures,
-  TestingLibraryFixtures,
-} from '@playwright-testing-library/test/fixture';
 import { Miniflare } from 'miniflare';
 import { MockAgent, setGlobalDispatcher } from 'undici';
 
-interface TestFixtures extends TestingLibraryFixtures {
+interface TestFixtures {
   mockAgent: MockAgent;
 }
 
@@ -18,9 +14,6 @@ interface WorkerFixtures {
 export { expect };
 
 export const test = base.extend<TestFixtures, WorkerFixtures>({
-  // Setup queries from playwright-testing-library
-  ...fixtures,
-
   // Assign a unique "port" for each worker process
   port: [
     // eslint-disable-next-line no-empty-pattern
