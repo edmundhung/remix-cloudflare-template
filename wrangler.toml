@@ -1,21 +1,8 @@
 name = "template"
-type = "javascript"
-workers_dev = true
-# account_id = "Or specified with process.env.CF_ACCOUNT_ID"
-# zone_id = "Or specified with process.env.CF_ZONE_ID"
+main = "./dist/worker.mjs"
 # route = "example.com/*"
 compatibility_date = "2022-11-25"
 compatibility_flags = ["streams_enable_constructors"]
 
 [site]
 bucket = "./public"
-entry-point = "."
-
-[build]
-command = "npm run build"
-watch_dir = "./build/index.js"
-
-[build.upload]
-format = "modules"
-dir = "./dist"
-main = "./worker.mjs"

@@ -1,8 +1,5 @@
-// Required for custom adapters
 import type { AppLoadContext } from '@remix-run/cloudflare';
 import { createRequestHandler as createRemixRequestHandler } from '@remix-run/cloudflare';
-
-// Required only for Worker Site
 import {
   getAssetFromKV,
   MethodNotAllowedError,

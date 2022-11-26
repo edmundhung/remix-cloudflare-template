@@ -60,6 +60,8 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
+      - name: 📦 Build the worker
+        run: npm run build
       - name: 🔥 Publish
         run: npx wrangler publish
         env:

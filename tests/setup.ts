@@ -1,6 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 import { Miniflare } from 'miniflare';
 import { MockAgent, setGlobalDispatcher } from 'undici';
+import packageJson from '../package.json';
 
 interface TestFixtures {
   mockAgent: MockAgent;
@@ -46,9 +47,9 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
   mf: [
     async ({ port }, use) => {
       const mf = new Miniflare({
+        scriptPath: packageJson.module,
+        modules: true,
         wranglerConfigPath: true,
-        buildCommand: undefined,
-        bindings: {},
         port,
       });
 
