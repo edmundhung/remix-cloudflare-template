@@ -1,6 +1,3 @@
-// Required for installGlobals();
-import '@remix-run/cloudflare-workers';
-
 // Required for custom adapters
 import type { AppLoadContext } from '@remix-run/cloudflare';
 import { createRequestHandler as createRemixRequestHandler } from '@remix-run/cloudflare';
@@ -12,8 +9,9 @@ import {
   NotFoundError,
 } from '@cloudflare/kv-asset-handler';
 
-// @ts-expect-error External JSON only available on CF runtime / Miniflare
 import manifest from '__STATIC_CONTENT_MANIFEST';
+
+const assetManifest = JSON.parse(manifest);
 
 export interface GetLoadContextFunction<Env = unknown> {
   (request: Request, env: Env, ctx: ExecutionContext): AppLoadContext;
@@ -51,7 +49,7 @@ export function createRequestHandler<Env>({
   };
 }
 
-export async function handleKvAsset<Env>(
+export async function handleAsset<Env extends { __STATIC_CONTENT: string }>(
   request: Request,
   env: Env,
   ctx: ExecutionContext
@@ -80,8 +78,8 @@ export async function handleKvAsset<Env>(
             edgeTTL: 60 * 10,
           };
         },
-        ASSET_NAMESPACE: (env as any).__STATIC_CONTENT,
-        ASSET_MANIFEST: JSON.parse(manifest),
+        ASSET_NAMESPACE: env.__STATIC_CONTENT,
+        ASSET_MANIFEST: assetManifest,
       }
     );
   } catch (error) {
@@ -94,11 +92,4 @@ export async function handleKvAsset<Env>(
 
     throw error;
   }
-}
-
-export async function handlePageAsset<Env>(
-  request: Request,
-  env: Env & { ASSETS: { fetch: typeof fetch } }
-): Promise<Response> {
-  return await env.ASSETS.fetch(request.url, request);
 }
