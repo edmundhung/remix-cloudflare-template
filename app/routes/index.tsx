@@ -1,7 +1,7 @@
 import type {
   MetaFunction,
   LinksFunction,
-  LoaderFunction,
+  LoaderArgs,
 } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 
@@ -16,14 +16,14 @@ export let links: LinksFunction = () => {
   return [];
 };
 
-export let loader: LoaderFunction = async ({ request }) => {
+export let loader = async ({ request }: LoaderArgs) => {
   return {
     title: 'remix-worker-template',
   };
 };
 
 export default function Index() {
-  let { title } = useLoaderData();
+  let { title } = useLoaderData<typeof loader>();
 
   return (
     <div>

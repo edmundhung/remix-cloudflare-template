@@ -18,4 +18,6 @@ declare module '@remix-run/server-runtime' {
     env: Env;
     ctx: ExecutionContext;
   }
+
+  export * from '@remix-run/server-runtime/dist/index';
 }
