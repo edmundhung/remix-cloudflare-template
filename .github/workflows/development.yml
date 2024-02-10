@@ -1,4 +1,4 @@
-name: Development Workflow
+name: CI
 on:
   - push
 jobs:
@@ -11,7 +11,7 @@ jobs:
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
         with:
@@ -32,7 +32,7 @@ jobs:
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
         with:
@@ -41,29 +41,3 @@ jobs:
         run: npx prettier --check .
       - name: ✅ Code linting
         run: npx eslint . --ext .js,.mjs,.ts,.tsx
-
-  deploy:
-    name: 🛳 Deploying
-    needs: [test, lint]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🛑 Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.1
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v3
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
-      - name: 📦 Build the worker
-        run: npm run build
-      - name: 🔥 Publish
-        run: npx wrangler publish
-        env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
