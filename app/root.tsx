@@ -7,35 +7,30 @@ import * as React from 'react';
 import {
   Link,
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useCatch,
+  isRouteErrorResponse,
+  useRouteError,
 } from '@remix-run/react';
+import stylesUrl from '~/styles.css?url';
 
-import stylesUrl from '~/styles/tailwind.css';
-
-/**
- * The `links` export is a function that returns an array of objects that map to
- * the attributes for an HTML `<link>` element. These will load `<link>` tags on
- * every route in the app, but individual routes can include their own links
- * that are automatically unloaded when a user navigates away from the route.
- *
- * https://remix.run/api/app#links
- */
-export let links: LinksFunction = () => {
+export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: stylesUrl }];
 };
 
-export let meta: MetaFunction = () => {
-  return {
-    viewport: 'width=device-width, initial-scale=1',
-  };
+export const meta: MetaFunction = () => {
+  return [
+    {
+      charset: 'utf-8',
+      // title: 'Conform Playground',
+      viewport: 'width=device-width,initial-scale=1',
+    },
+  ];
 };
 
-export let loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async () => {
   return { date: new Date() };
 };
 
@@ -68,7 +63,6 @@ function Document({
         {children}
         <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === 'development' && <LiveReload />}
       </body>
     </html>
   );
@@ -98,49 +92,51 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
   );
 }
 
-export function CatchBoundary() {
-  let caught = useCatch();
+export function ErrorBoundary() {
+  const error = useRouteError();
 
-  let message;
-  switch (caught.status) {
-    case 401:
-      message = (
-        <p>
-          Oops! Looks like you tried to visit a page that you do not have access
-          to.
-        </p>
-      );
-      break;
-    case 404:
-      message = (
-        <p>Oops! Looks like you tried to visit a page that does not exist.</p>
-      );
-      break;
+  // Log the error to the console
+  console.error(error);
 
-    default:
-      throw new Error(caught.data || caught.statusText);
+  if (isRouteErrorResponse(error)) {
+    let message;
+    switch (error.status) {
+      case 401:
+        message = (
+          <p>
+            Oops! Looks like you tried to visit a page that you do not have
+            access to.
+          </p>
+        );
+        break;
+      case 404:
+        message = (
+          <p>Oops! Looks like you tried to visit a page that does not exist.</p>
+        );
+        break;
+
+      default:
+        throw new Error(error.data || error.statusText);
+    }
+
+    return (
+      <Document title={`${error.status} ${error.statusText}`}>
+        <Layout>
+          <h1>
+            {error.status}: {error.statusText}
+          </h1>
+          {message}
+        </Layout>
+      </Document>
+    );
   }
 
-  return (
-    <Document title={`${caught.status} ${caught.statusText}`}>
-      <Layout>
-        <h1>
-          {caught.status}: {caught.statusText}
-        </h1>
-        {message}
-      </Layout>
-    </Document>
-  );
-}
-
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error);
   return (
     <Document title="Error!">
       <Layout>
         <div>
           <h1>There was an error</h1>
-          <p>{error.message}</p>
+          <p>{`${error}`}</p>
           <hr />
           <p>
             Hey, developer, you should replace this with what you want your

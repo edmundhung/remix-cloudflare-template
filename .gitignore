@@ -1,23 +1,12 @@
 node_modules
+.env
 
 # Remix
 /.cache
 /build
-/public/build
+
+# Cloudflare
+.wrangler
 
 # Remix stacks
 /package-lock.json
-
-# Custom Build
-/dist
-
-# Tailwind
-/app/styles/tailwind.css
-
-# Cypress
-/cypress/videos
-/cypress/screenshots
-
-# Miniflare
-/.mf
-/.env

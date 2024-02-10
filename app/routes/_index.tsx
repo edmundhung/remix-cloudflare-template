@@ -1,29 +1,21 @@
-import type {
-  MetaFunction,
-  LinksFunction,
-  LoaderFunction,
-} from '@remix-run/cloudflare';
+import type { MetaFunction, LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
 
-export let meta: MetaFunction = () => {
-  return {
-    title: 'remix-worker-template',
-    description: 'All-in-one remix starter template for Cloudflare Workers',
-  };
+export const meta: MetaFunction = () => {
+  return [
+    { title: 'remix-worker-template' },
+    { description: 'All-in-one remix starter template for Cloudflare Workers' },
+  ];
 };
 
-export let links: LinksFunction = () => {
-  return [];
-};
-
-export let loader: LoaderFunction = async ({ request }) => {
+export function loader({ request }: LoaderFunctionArgs) {
   return {
     title: 'remix-worker-template',
   };
-};
+}
 
 export default function Index() {
-  let { title } = useLoaderData();
+  const { title } = useLoaderData<typeof loader>();
 
   return (
     <div>
