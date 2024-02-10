@@ -1,8 +1,4 @@
-import type {
-  LinksFunction,
-  MetaFunction,
-  LoaderFunction,
-} from '@remix-run/cloudflare';
+import type { MetaFunction, LoaderFunction } from '@remix-run/cloudflare';
 import * as React from 'react';
 import {
   Link,
@@ -14,11 +10,12 @@ import {
   isRouteErrorResponse,
   useRouteError,
 } from '@remix-run/react';
-import stylesUrl from '~/styles.css?url';
+import '~/styles.css';
 
-export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: stylesUrl }];
-};
+// We will rollback to loading CSS through links when `.css?url` is supported
+// export const links: LinksFunction = () => {
+//   return [{ rel: 'stylesheet', href: stylesUrl }];
+// };
 
 export const meta: MetaFunction = () => {
   return [
