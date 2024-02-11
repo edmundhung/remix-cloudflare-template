@@ -13,6 +13,12 @@ interface WorkerFixtures {
 	msw: SetupServer;
 }
 
+export async function clearKV(namespace: KVNamespace): Promise<void> {
+	const result = await namespace.list();
+
+	await Promise.all(result.keys.map(key => namespace.delete(key.name)));
+}
+
 export const expect = baseExpect.extend({});
 
 export const test = baseTest.extend<TestFixtures, WorkerFixtures>({
@@ -65,12 +71,15 @@ export const test = baseTest.extend<TestFixtures, WorkerFixtures>({
 	wrangler: [
 		// eslint-disable-next-line no-empty-pattern
 		async ({}, use) => {
-			const bindings = await getBindingsProxy<Env>();
+			const wrangler = await getBindingsProxy<Env>();
 
 			// To access bindings in the tests.
-			await use(bindings);
+			await use(wrangler);
 
-			await bindings.dispose();
+			// Ensure all cachees are cleaned up
+			await clearKV(wrangler.bindings.cache);
+
+			await wrangler.dispose();
 		},
 		{ scope: 'worker', auto: true },
 	],

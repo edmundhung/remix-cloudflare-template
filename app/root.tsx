@@ -23,11 +23,9 @@ import { RemixLogo } from './components';
 
 export const meta: MetaFunction = () => {
 	return [
-		{
-			charset: 'utf-8',
-			title: 'remix-cloudlfare-template',
-			viewport: 'width=device-width,initial-scale=1',
-		},
+		{ charset: 'utf-8' },
+		{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
+		{ title: 'remix-cloudlfare-template' },
 	];
 };
 
@@ -99,13 +97,15 @@ function Layout({
 					className={`relative flex-1 ${children ? 'border-t lg:border-t-0' : ''}`.trim()}
 				>
 					<div className="sticky top-0">
-						<div className="flex flex-col px-5 py-5 lg:min-h-screen lg:py-10">
+						<div
+							className={`flex flex-col px-5 py-5 lg:px-10 lg:py-10 ${children ? 'lg:min-h-screen' : 'min-h-screen'}`.trim()}
+						>
 							<header className="py-4">
 								<Link to="/" title="Remix">
 									<RemixLogo />
 								</Link>
 							</header>
-							<div className="flex-1 py-5 lg:py-20">
+							<div className="flex-1 py-10 lg:py-20">
 								<h2 className="text-xl">{title}</h2>
 								<p className="py-2">{description}</p>
 								{actionText ? (
@@ -126,9 +126,11 @@ function Layout({
 						</div>
 					</div>
 				</section>
-				<main className="flex-1">
-					<div className="px-5 py-5 lg:py-10">{children}</div>
-				</main>
+				{children ? (
+					<main className="flex-1">
+						<div className="px-5 py-5 lg:py-10">{children}</div>
+					</main>
+				) : null}
 			</div>
 		</div>
 	);
@@ -154,7 +156,8 @@ export function ErrorBoundary() {
 					'Oops! Looks like you tried to visit a page that does not exist.';
 				break;
 			default:
-				throw new Error(error.data || error.statusText);
+				message = JSON.stringify(error.data, null, 2);
+				break;
 		}
 
 		return (

@@ -11,6 +11,5 @@ interface Env {
 declare module '@remix-run/cloudflare' {
 	export interface AppLoadContext {
 		env: Env;
-		waitUntil(promise: Promise<void>): void;
 	}
 }

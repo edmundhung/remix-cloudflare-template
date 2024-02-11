@@ -38,7 +38,6 @@
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.0.10",
     "lint-staged": "^15.2.2",
-    "miniflare": "^3.20240129.1",
     "msw": "^2.1.7",
     "postcss": "^8.4.35",
     "prettier": "^3.2.5",
