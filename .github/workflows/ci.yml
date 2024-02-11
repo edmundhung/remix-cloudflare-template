@@ -18,8 +18,8 @@ jobs:
           useLockFile: false
       - name: 🎭 Install Playwright
         run: npx playwright install --with-deps
-      - name: 📦 Build the worker
-        run: npx remix vite:build
+      - name: 📦 Prepare the environment
+        run: cp wrangler.toml.example wrangler.toml
       - name: 💣 Run some tests
         run: npx playwright test
 
