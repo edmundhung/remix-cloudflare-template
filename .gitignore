@@ -8,5 +8,9 @@ node_modules
 # Cloudflare
 .wrangler
 
+# Playwright
+/test-results
+/playwright-report
+
 # Remix stacks
 /package-lock.json

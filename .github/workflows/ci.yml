@@ -19,9 +19,9 @@ jobs:
       - name: 🎭 Install Playwright
         run: npx playwright install --with-deps
       - name: 📦 Build the worker
-        run: npm run build
+        run: npx remix vite:build
       - name: 💣 Run some tests
-        run: npm run test
+        run: npx playwright test
 
   lint:
     name: ⬣ Linting

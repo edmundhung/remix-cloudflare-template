@@ -1,17 +1,17 @@
 {
 	"private": true,
-	"name": "remix-worker-template",
+	"name": "remix-cloudflare-template",
+	"type": "module",
 	"description": "All-in-one remix starter template for Cloudflare Pages",
-	"module": "./dist/worker.mjs",
 	"scripts": {
 		"dev": "remix vite:dev",
-		"test": "NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" playwright test",
+		"test": "playwright test --ui",
 		"start": "wrangler pages dev ./build/client",
 		"build": "remix vite:build",
-		"cleanup": "rimraf .cache ./build ./public/build",
+		"cleanup": "rimraf .cache ./build",
 		"lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
 		"typecheck": "tsc",
-		"prepare": "husky install"
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"@markdoc/markdoc": "^0.4.0",
@@ -39,6 +39,7 @@
 		"husky": "^9.0.10",
 		"lint-staged": "^15.2.2",
 		"miniflare": "^3.20240129.1",
+		"msw": "^2.1.7",
 		"postcss": "^8.4.35",
 		"prettier": "^3.2.5",
 		"rimraf": "^5.0.5",

@@ -95,7 +95,9 @@ function Layout({
 	return (
 		<div className="container mx-auto">
 			<div className="flex flex-col-reverse lg:flex-row">
-				<section className="flex-1 relative border-t lg:border-t-0">
+				<section
+					className={`flex-1 relative ${children ? 'border-t lg:border-t-0' : ''}`.trim()}
+				>
 					<div className="sticky top-0">
 						<div className="flex flex-col lg:min-h-screen lg:py-10 px-5 py-5">
 							<header className="py-4">
@@ -115,7 +117,7 @@ function Layout({
 									</a>
 								) : null}
 							</div>
-							<footer>
+							<footer className="pt-8">
 								Wanna know more about Remix? Check out{' '}
 								<a className="underline" href="https://remix.guide">
 									Remix Guide
