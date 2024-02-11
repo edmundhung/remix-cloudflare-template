@@ -1,16 +1,20 @@
-import type { MetaFunction, LoaderFunction } from '@remix-run/cloudflare';
+import type { MetaFunction } from '@remix-run/cloudflare';
 import * as React from 'react';
 import {
-  Link,
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  isRouteErrorResponse,
-  useRouteError,
+	Link,
+	Links,
+	Meta,
+	Outlet,
+	Scripts,
+	ScrollRestoration,
+	isRouteErrorResponse,
+	json,
+	useLoaderData,
+	useRouteError,
 } from '@remix-run/react';
 import '~/styles.css';
+import { metadata } from './services/github.server';
+import { RemixLogo } from './components';
 
 // We will rollback to loading CSS through links when `.css?url` is supported
 // export const links: LinksFunction = () => {
@@ -18,153 +22,149 @@ import '~/styles.css';
 // };
 
 export const meta: MetaFunction = () => {
-  return [
-    {
-      charset: 'utf-8',
-      // title: 'Conform Playground',
-      viewport: 'width=device-width,initial-scale=1',
-    },
-  ];
+	return [
+		{
+			charset: 'utf-8',
+			title: 'remix-cloudlfare-template',
+			viewport: 'width=device-width,initial-scale=1',
+		},
+	];
 };
 
-export const loader: LoaderFunction = async () => {
-  return { date: new Date() };
-};
+export function loader() {
+	return json({
+		repo: metadata.repo,
+		owner: metadata.owner,
+		description: '📜 All-in-one remix starter template for Cloudflare Pages',
+	});
+}
 
 export default function App() {
-  return (
-    <Document>
-      <Layout>
-        <Outlet />
-      </Layout>
-    </Document>
-  );
+	const { repo, owner, description } = useLoaderData<typeof loader>();
+	return (
+		<Document>
+			<Layout
+				title={repo}
+				description={description}
+				actionText="GitHub Repository"
+				actionLink={`https://github.com/${owner}/${repo}`}
+			>
+				<Outlet />
+			</Layout>
+		</Document>
+	);
 }
 
 function Document({
-  children,
-  title,
+	children,
+	title,
 }: {
-  children: React.ReactNode;
-  title?: string;
+	children: React.ReactNode;
+	title?: string;
 }) {
-  return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        {title ? <title>{title}</title> : null}
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en">
+			<head>
+				<meta charSet="utf-8" />
+				{title ? <title>{title}</title> : null}
+				<Meta />
+				<Links />
+			</head>
+			<body>
+				{children}
+				<ScrollRestoration />
+				<Scripts />
+			</body>
+		</html>
+	);
 }
 
-function Layout({ children }: React.PropsWithChildren<{}>) {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 bg-white sm:px-10 p-5 border-b">
-        <Link to="/" title="Remix" className="remix-app__header-home-link">
-          <RemixLogo />
-        </Link>
-      </header>
-      <main className="flex-grow">{children}</main>
-      <footer className="sm:px-10 p-5">
-        Wanna know more about Remix? Check out{' '}
-        <a
-          className="underline"
-          href="https://remix.guide"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Remix Guide
-        </a>
-      </footer>
-    </div>
-  );
+function Layout({
+	children,
+	title,
+	description,
+	actionText,
+	actionLink,
+}: {
+	children?: React.ReactNode;
+	title?: string;
+	description?: string;
+	actionText?: string;
+	actionLink?: string;
+}) {
+	return (
+		<div className="container mx-auto">
+			<div className="flex flex-col-reverse lg:flex-row">
+				<section className="flex-1 relative border-t lg:border-t-0">
+					<div className="sticky top-0">
+						<div className="flex flex-col lg:min-h-screen lg:py-10 px-5 py-5">
+							<header className="py-4">
+								<Link to="/" title="Remix">
+									<RemixLogo />
+								</Link>
+							</header>
+							<div className="flex-1 py-5 lg:py-20">
+								<h2 className="text-xl">{title}</h2>
+								<p className="py-2">{description}</p>
+								{actionText ? (
+									<a
+										className="inline-block border hover:border-black px-4 py-2 mt-2"
+										href={actionLink ?? '#'}
+									>
+										{actionText}
+									</a>
+								) : null}
+							</div>
+							<footer>
+								Wanna know more about Remix? Check out{' '}
+								<a className="underline" href="https://remix.guide">
+									Remix Guide
+								</a>
+							</footer>
+						</div>
+					</div>
+				</section>
+				<main className="flex-1">
+					<div className="lg:py-10 px-5 py-5">{children}</div>
+				</main>
+			</div>
+		</div>
+	);
 }
 
 export function ErrorBoundary() {
-  const error = useRouteError();
+	const error = useRouteError();
 
-  // Log the error to the console
-  console.error(error);
+	// Log the error to the console
+	console.error(error);
 
-  if (isRouteErrorResponse(error)) {
-    let message;
-    switch (error.status) {
-      case 401:
-        message = (
-          <p>
-            Oops! Looks like you tried to visit a page that you do not have
-            access to.
-          </p>
-        );
-        break;
-      case 404:
-        message = (
-          <p>Oops! Looks like you tried to visit a page that does not exist.</p>
-        );
-        break;
+	if (isRouteErrorResponse(error)) {
+		const title = `${error.status} ${error.statusText}`;
 
-      default:
-        throw new Error(error.data || error.statusText);
-    }
+		let message;
+		switch (error.status) {
+			case 401:
+				message =
+					'Oops! Looks like you tried to visit a page that you do not have access to.';
+				break;
+			case 404:
+				message =
+					'Oops! Looks like you tried to visit a page that does not exist.';
+				break;
+			default:
+				throw new Error(error.data || error.statusText);
+		}
 
-    return (
-      <Document title={`${error.status} ${error.statusText}`}>
-        <Layout>
-          <h1>
-            {error.status}: {error.statusText}
-          </h1>
-          {message}
-        </Layout>
-      </Document>
-    );
-  }
+		return (
+			<Document title={title}>
+				<Layout title={title} description={message} />
+			</Document>
+		);
+	}
 
-  return (
-    <Document title="Error!">
-      <Layout>
-        <div>
-          <h1>There was an error</h1>
-          <p>{`${error}`}</p>
-          <hr />
-          <p>
-            Hey, developer, you should replace this with what you want your
-            users to see.
-          </p>
-        </div>
-      </Layout>
-    </Document>
-  );
-}
-
-function RemixLogo(props: React.ComponentPropsWithoutRef<'svg'>) {
-  return (
-    <svg
-      viewBox="0 0 659 165"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-      aria-labelledby="remix-run-logo-title"
-      role="img"
-      width="106"
-      height="30"
-      fill="currentColor"
-      {...props}
-    >
-      <title id="remix-run-logo-title">Remix Logo</title>
-      <path d="M0 161V136H45.5416C53.1486 136 54.8003 141.638 54.8003 145V161H0Z M133.85 124.16C135.3 142.762 135.3 151.482 135.3 161H92.2283C92.2283 158.927 92.2653 157.03 92.3028 155.107C92.4195 149.128 92.5411 142.894 91.5717 130.304C90.2905 111.872 82.3473 107.776 67.7419 107.776H54.8021H0V74.24H69.7918C88.2407 74.24 97.4651 68.632 97.4651 53.784C97.4651 40.728 88.2407 32.816 69.7918 32.816H0V0H77.4788C119.245 0 140 19.712 140 51.2C140 74.752 125.395 90.112 105.665 92.672C122.32 96 132.057 105.472 133.85 124.16Z" />
-      <path d="M229.43 120.576C225.59 129.536 218.422 133.376 207.158 133.376C194.614 133.376 184.374 126.72 183.35 112.64H263.478V101.12C263.478 70.1437 243.254 44.0317 205.11 44.0317C169.526 44.0317 142.902 69.8877 142.902 105.984C142.902 142.336 169.014 164.352 205.622 164.352C235.83 164.352 256.822 149.76 262.71 123.648L229.43 120.576ZM183.862 92.6717C185.398 81.9197 191.286 73.7277 204.598 73.7277C216.886 73.7277 223.542 82.4317 224.054 92.6717H183.862Z" />
-      <path d="M385.256 66.5597C380.392 53.2477 369.896 44.0317 349.672 44.0317C332.52 44.0317 320.232 51.7117 314.088 64.2557V47.1037H272.616V161.28H314.088V105.216C314.088 88.0638 318.952 76.7997 332.52 76.7997C345.064 76.7997 348.136 84.9917 348.136 100.608V161.28H389.608V105.216C389.608 88.0638 394.216 76.7997 408.04 76.7997C420.584 76.7997 423.4 84.9917 423.4 100.608V161.28H464.872V89.5997C464.872 65.7917 455.656 44.0317 424.168 44.0317C404.968 44.0317 391.4 53.7597 385.256 66.5597Z" />
-      <path d="M478.436 47.104V161.28H519.908V47.104H478.436ZM478.18 36.352H520.164V0H478.18V36.352Z" />
-      <path d="M654.54 47.1035H611.788L592.332 74.2395L573.388 47.1035H527.564L568.78 103.168L523.98 161.28H566.732L589.516 130.304L612.3 161.28H658.124L613.068 101.376L654.54 47.1035Z" />
-    </svg>
-  );
+	return (
+		<Document title="Error!">
+			<Layout title="There was an error" description={`${error}`} />
+		</Document>
+	);
 }

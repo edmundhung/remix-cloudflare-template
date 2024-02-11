@@ -1,39 +1,26 @@
-import type { MetaFunction, LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { useLoaderData } from '@remix-run/react';
+import type { LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { json, useLoaderData } from '@remix-run/react';
+import { Markdown } from '~/components';
+import { getFileContentWithCache } from '~/services/github.server';
+import { parse } from '~/services/markdoc.server';
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: 'remix-worker-template' },
-    { description: 'All-in-one remix starter template for Cloudflare Workers' },
-  ];
-};
+export async function loader({ context }: LoaderFunctionArgs) {
+	const content = await getFileContentWithCache(context, 'README.md');
 
-export function loader({ request }: LoaderFunctionArgs) {
-  return {
-    title: 'remix-worker-template',
-  };
+	return json(
+		{
+			content: parse(content),
+		},
+		{
+			headers: {
+				'Cache-Control': 'public, max-age=3600',
+			},
+		},
+	);
 }
 
 export default function Index() {
-  const { title } = useLoaderData<typeof loader>();
+	const { content } = useLoaderData<typeof loader>();
 
-  return (
-    <div>
-      <div className="sm:px-10 p-5">
-        <h2 className="mt-6 text-xl">{title}</h2>
-        <p className="py-2">
-          All-in-one remix starter template for Cloudflare Workers
-        </p>
-
-        <a
-          className="inline-block border hover:border-black px-4 py-2 mt-2"
-          href="https://github.com/edmundhung/remix-worker-template"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Github Repository
-        </a>
-      </div>
-    </div>
-  );
+	return <Markdown content={content} />;
 }

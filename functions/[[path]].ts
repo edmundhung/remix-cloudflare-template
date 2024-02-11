@@ -6,11 +6,11 @@ import { createPagesFunctionHandler } from '@remix-run/cloudflare-pages';
 import * as build from '../build/server';
 
 export const onRequest = createPagesFunctionHandler({
-  build,
-  getLoadContext: (context) => ({
-    env: context.env,
-    waitUntil(promise: Promise<unknown>) {
-      context.waitUntil(promise);
-    },
-  }),
+	build,
+	getLoadContext: (context) => ({
+		env: context.env,
+		waitUntil(promise: Promise<unknown>) {
+			context.waitUntil(promise);
+		},
+	}),
 });

@@ -1,18 +1,18 @@
 import { test, expect } from './setup';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+	await page.goto('/');
 });
 
 /**
  * You can interact with the page or browser through the page / queries
  */
 test('if the page shows the package name', async ({ page }) => {
-  const title = page.getByText('remix-worker-template', {
-    exact: false,
-  });
+	const title = page.getByText('remix-worker-template', {
+		exact: false,
+	});
 
-  await expect(title).toBeVisible();
+	await expect(title).toBeVisible();
 });
 
 /**
@@ -21,12 +21,12 @@ test('if the page shows the package name', async ({ page }) => {
  * Or even interacting with the DO by `mf.getDurableObjectNamespace(...)`
  */
 test('if the binding are set properly', async ({ mf }) => {
-  const bindings = await mf.getBindings();
+	const bindings = await mf.getBindings();
 
-  expect(bindings).toEqual({
-    __STATIC_CONTENT: expect.anything(),
-    __STATIC_CONTENT_MANIFEST: expect.anything(),
-  });
+	expect(bindings).toEqual({
+		__STATIC_CONTENT: expect.anything(),
+		__STATIC_CONTENT_MANIFEST: expect.anything(),
+	});
 });
 
 /**
@@ -34,16 +34,16 @@ test('if the binding are set properly', async ({ mf }) => {
  * @see https://github.com/nodejs/undici/blob/main/docs/api/MockAgent.md
  */
 test('if the request is sent', async ({ mockAgent }) => {
-  const client = mockAgent.get('http://example.com');
+	const client = mockAgent.get('http://example.com');
 
-  client
-    .intercept({
-      method: 'GET',
-      path: '/hello-world',
-    })
-    .reply(200, {
-      foo: 'bar',
-    });
+	client
+		.intercept({
+			method: 'GET',
+			path: '/hello-world',
+		})
+		.reply(200, {
+			foo: 'bar',
+		});
 
-  // expect() something happens
+	// expect() something happens
 });
