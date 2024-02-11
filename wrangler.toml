@@ -1,4 +1,4 @@
 name = "remix-cloudflare-template"
 kv_namespaces = [
-  { id = "CACHE", binding="CACHE" }
+  { binding = "cache", id = "7bd353e1660544f497319275f6e241fa" }
 ]

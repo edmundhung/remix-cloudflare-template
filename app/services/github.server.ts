@@ -56,7 +56,7 @@ export async function getFileContentWithCache(
 	path: string,
 ): Promise<string> {
 	const key = `github/${path}`;
-	const cache = await context.env.CACHE.get(key);
+	const cache = await context.env.cache.get(key);
 
 	if (cache) {
 		return cache;
@@ -71,7 +71,7 @@ export async function getFileContentWithCache(
 
 	// Update the cache
 	// TODO: Use `waitUntil` to update the cache in the background
-	await context.env.CACHE.put(key, content, { expirationTtl: 60 * 60 });
+	await context.env.cache.put(key, content, { expirationTtl: 60 * 60 });
 
 	return content;
 }

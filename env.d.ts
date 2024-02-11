@@ -5,7 +5,7 @@ import '@cloudflare/workers-types';
 interface Env {
 	ENVIRONMENT?: 'development';
 	GITHUB_TOKEN?: string;
-	CACHE: KVNamespace<string>;
+	cache: KVNamespace<string>;
 }
 
 declare module '@remix-run/cloudflare' {
