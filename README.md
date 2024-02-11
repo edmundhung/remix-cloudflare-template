@@ -38,4 +38,5 @@ npm run build && npm run test
 
 ## CI/CD
 
-The template ships a [CI workflow](./.github/workflows/ci.yml) which is triggered whenever new changes are pushed.
+The template ships a [CI workflow](./.github/workflows/ci.yml) which is
+triggered whenever new changes are pushed.

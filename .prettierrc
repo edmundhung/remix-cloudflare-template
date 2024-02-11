@@ -1,4 +1,0 @@
-# Prettier Configuration
-# All supported options are listed here: https://prettier.io/docs/en/options.html
-singleQuote: true
-useTabs: true
