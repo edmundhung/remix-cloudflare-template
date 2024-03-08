@@ -7,7 +7,8 @@ node_modules
 
 # Cloudflare
 .wrangler
-wrangler.toml
+.dev.vars
+worker-configuration.d.ts
 
 # Playwright
 /test-results

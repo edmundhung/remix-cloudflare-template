@@ -19,7 +19,7 @@ test('shows the package name', async ({ page }) => {
  * You can interact with the wrangler binding similar to the remix app
  */
 test('cache the README in KV', async ({ page, wrangler }) => {
-	await wrangler.bindings.cache.put('github/README.md', '# cached-readme');
+	await wrangler.env.cache.put('github/README.md', '# cached-readme');
 	await page.goto('/');
 
 	const title = page.getByRole('heading', {
@@ -52,7 +52,7 @@ test('fetch README from GitHub if not cached', async ({
 	);
 
 	// Clear cache
-	await wrangler.bindings.cache.delete('github/README.md');
+	await wrangler.env.cache.delete('github/README.md');
 
 	await page.goto('/');
 

@@ -1,14 +1,13 @@
 import { test as baseTest, expect as baseExpect } from '@playwright/test';
-import type { Env } from 'env';
 import { type ViteDevServer, createServer } from 'vite';
 import { type SetupServer, setupServer } from 'msw/node';
-import { type BindingsProxy, getBindingsProxy } from 'wrangler';
+import { type PlatformProxy, getPlatformProxy } from 'wrangler';
 
 interface TestFixtures {}
 
 interface WorkerFixtures {
 	port: number;
-	wrangler: BindingsProxy<Env>;
+	wrangler: PlatformProxy<Env>;
 	server: ViteDevServer;
 	msw: SetupServer;
 }
@@ -71,13 +70,13 @@ export const test = baseTest.extend<TestFixtures, WorkerFixtures>({
 	wrangler: [
 		// eslint-disable-next-line no-empty-pattern
 		async ({}, use) => {
-			const wrangler = await getBindingsProxy<Env>();
+			const wrangler = await getPlatformProxy<Env>();
 
 			// To access bindings in the tests.
 			await use(wrangler);
 
 			// Ensure all cachees are cleaned up
-			await clearKV(wrangler.bindings.cache);
+			await clearKV(wrangler.env.cache);
 
 			await wrangler.dispose();
 		},

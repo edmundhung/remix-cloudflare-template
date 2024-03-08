@@ -1,11 +1,6 @@
 import type { Endpoints } from '@octokit/types';
 import type { AppLoadContext } from '@remix-run/cloudflare';
 
-export const metadata = {
-	repo: 'remix-cloudflare-template',
-	owner: 'edmundhung',
-};
-
 export function getHeaders(auth: string | undefined) {
 	const headers = new Headers({
 		Accept: 'application/vnd.github+json',
@@ -64,8 +59,8 @@ export async function getFileContentWithCache(
 
 	const content = await getFileContent({
 		auth: context.env.GITHUB_TOKEN,
-		owner: metadata.owner,
-		repo: metadata.repo,
+		owner: context.env.GITHUB_OWNER,
+		repo: context.env.GITHUB_REPO,
 		path,
 	});
 

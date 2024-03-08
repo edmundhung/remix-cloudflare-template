@@ -19,7 +19,7 @@ jobs:
       - name: 🎭 Install Playwright
         run: npx playwright install --with-deps
       - name: 📦 Prepare the environment
-        run: cp wrangler.toml.example wrangler.toml
+        run: cp .dev.vars.example .dev.vars
       - name: 💣 Run some tests
         run: npx playwright test
 

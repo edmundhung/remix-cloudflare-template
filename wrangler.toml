@@ -5,4 +5,5 @@ kv_namespaces = [
 ]
 
 [vars]
-GITHUB_TOKEN = ""
+GITHUB_OWNER = "edmundhung"
+GITHUB_REPO = "remix-cloudflare-template"

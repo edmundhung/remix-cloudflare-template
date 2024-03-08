@@ -20,12 +20,11 @@ What's included?
 
 ## Development
 
-Before start, copy `wrangler.toml.example` and name it `wrangler.toml`. This
-file will be used to configure the development environment and define all the
-environment variables that you need for your application.
+Before start, copy [.dev.vars.example](./.dev.vars.example) and name it
+`.dev.vars` with the required secrets.
 
 ```sh
-cp wrangler.toml.example wrangler.toml
+cp .dev.vars.example .dev.vars
 ```
 
 To starts the vite dev server:
@@ -48,17 +47,21 @@ server with:
 npm run build && npm run start
 ```
 
-### New environment variable
+### New environment variable & secret
 
-To add a new environment variable, you can update the **var** section on the
-[wrangler.toml](./wrangler.toml) file with the new variable:
+To add a new secret, please
+[update the value on **.dev.vars**](https://developers.cloudflare.com/workers/configuration/secrets/#secrets-in-development)
+similar to a `.env` file.
+
+For the rest of the environment variable, you can update the **var** section on
+the [wrangler.toml](./wrangler.toml) file with the new variable:
 
 ```toml
 [vars]
 NEW_VARIABLE = "..."
 ```
 
-The variable will be available from the `env` object in the context.
+The variables will be available from the `env` object in the context.
 
 ### Setup a KV Namespace
 
@@ -77,10 +80,14 @@ Note that the `id` has no effect on the dev environment. You can use the same
 name for both `id` and `binding`. The namespace will be available form the `env`
 object in the context.
 
-### Improving types
+### Generate env types
 
-You can improve the types of the `env` object by updating
-[env.d.ts](./env.d.ts).
+You can generate the types of the `env` object based on `wrangler.toml` and
+`.dev.vars` with:
+
+```sh
+npx wrangler types
+```
 
 ## Deployment
 

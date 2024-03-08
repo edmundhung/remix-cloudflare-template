@@ -1,4 +1,4 @@
-import type { MetaFunction } from '@remix-run/cloudflare';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import * as React from 'react';
 import {
 	Link,
@@ -13,7 +13,6 @@ import {
 	useRouteError,
 } from '@remix-run/react';
 import '~/styles.css';
-import { metadata } from './services/github.server';
 import { RemixLogo } from './components';
 
 // We will rollback to loading CSS through links when `.css?url` is supported
@@ -29,10 +28,10 @@ export const meta: MetaFunction = () => {
 	];
 };
 
-export function loader() {
+export function loader({ context }: LoaderFunctionArgs) {
 	return json({
-		repo: metadata.repo,
-		owner: metadata.owner,
+		repo: context.env.GITHUB_REPO,
+		owner: context.env.GITHUB_OWNER,
 		description: '📜 All-in-one remix starter template for Cloudflare Pages',
 	});
 }
