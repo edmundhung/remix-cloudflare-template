@@ -1,8 +1,8 @@
-import * as React from 'react';
 import chevronUpIcon from '~/assets/chevron-up.svg';
 import chevronRightIcon from '~/assets/chevron-right.svg';
 import remixLetterLogo from '~/assets/remix-letter-light.svg';
 import { Link, useLocation } from '@remix-run/react';
+import { Fragment, useLayoutEffect, useRef } from 'react';
 
 export interface Menu {
 	title: string;
@@ -13,15 +13,28 @@ export interface Menu {
 }
 
 export function Breadcrumbs({
+	locationKey,
 	trails,
 	children,
 }: {
+	locationKey: string;
 	trails: string[];
 	children: React.ReactNode;
 }) {
+	const detailsRef = useRef<HTMLDetailsElement>(null);
+
+	useLayoutEffect(() => {
+		if (detailsRef.current) {
+			detailsRef.current.open = false;
+		}
+	}, [locationKey]);
+
 	return (
 		<>
-			<details className="group peer h-12 border-t bg-white open:bg-neutral-100 hover:bg-neutral-100 lg:hidden">
+			<details
+				ref={detailsRef}
+				className="group peer h-12 border-t bg-white open:bg-neutral-100 hover:bg-neutral-100 lg:hidden"
+			>
 				<summary className="h-full cursor-pointer select-none px-2 marker:content-none">
 					<div className="mx-auto flex h-full max-w-screen-sm flex-row items-center gap-2">
 						<img
@@ -38,12 +51,12 @@ export function Breadcrumbs({
 						/>
 						<div className="truncate">
 							{trails.map((trail, index) => (
-								<React.Fragment key={index}>
+								<Fragment key={index}>
 									{index > 0 ? (
 										<span className="px-2 text-zinc-500">/</span>
 									) : null}
 									<span>{trail}</span>
-								</React.Fragment>
+								</Fragment>
 							))}
 						</div>
 					</div>
@@ -72,7 +85,7 @@ export function MainNavigation({ menus }: { menus: Menu[] }) {
 
 	return (
 		<div className="flex flex-col lg:h-screen">
-			<Breadcrumbs trails={trails}>
+			<Breadcrumbs locationKey={location.key} trails={trails}>
 				<nav className="mx-auto flex max-w-screen-sm flex-1 flex-col px-5 py-5 lg:py-10">
 					<header className="px-2 pb-8 pt-1">
 						<Link to="/" className="inline-block">
