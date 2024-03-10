@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+ * To hide the default marker of the summary element on Safari
+ */
+summary.marker\:content-none::-webkit-details-marker {
+	display: none;
+}
