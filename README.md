@@ -12,7 +12,7 @@ What's included?
 - [Github Actions](https://github.com/features/actions) for CI/CD
 - [Markdoc](https://markdoc.dev) for rendering markdown
 - Styling with [Tailwind](https://tailwindcss.com/)
-- End-to-end testing with [Playwright](playwright.dev/)
+- End-to-end testing with [Playwright](https://playwright.dev/)
 - Local third party request mocking with [MSW](https://mswjs.io/)
 - Code formatting with [Prettier](https://prettier.io)
 - Linting with [ESLint](https://eslint.org)
@@ -34,7 +34,7 @@ npm run dev
 ```
 
 You can also start the Playwright UI mode to test your application. You will
-find all the tests defined in the [/tests/e2e](./tests/e2e/) directory.
+find all the tests defined in the [/tests/e2e](./tests/e2e) directory.
 
 ```sh
 npm run test
@@ -50,8 +50,8 @@ npm run build && npm run start
 ### New environment variable & secret
 
 To add a new secret, please
-[update the value on **.dev.vars**](https://developers.cloudflare.com/workers/configuration/secrets/#secrets-in-development)
-similar to a `.env` file.
+[update the value](https://developers.cloudflare.com/workers/configuration/secrets/#secrets-in-development)
+on the `.dev.vars` file.
 
 For the rest of the environment variable, you can update the **var** section on
 the [wrangler.toml](./wrangler.toml) file with the new variable:

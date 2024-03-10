@@ -1,7 +1,10 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
+import type {
+	LinksFunction,
+	LoaderFunctionArgs,
+	MetaFunction,
+} from '@remix-run/cloudflare';
 import * as React from 'react';
 import {
-	Link,
 	Links,
 	Meta,
 	Outlet,
@@ -12,13 +15,12 @@ import {
 	useLoaderData,
 	useRouteError,
 } from '@remix-run/react';
-import '~/styles.css';
-import { RemixLogo } from './components';
+import stylesUrl from '~/styles.css?url';
+import { type Menu, ErrorLayout, Layout } from './layout';
 
-// We will rollback to loading CSS through links when `.css?url` is supported
-// export const links: LinksFunction = () => {
-//   return [{ rel: 'stylesheet', href: stylesUrl }];
-// };
+export const links: LinksFunction = () => {
+	return [{ rel: 'stylesheet', href: stylesUrl }];
+};
 
 export const meta: MetaFunction = () => {
 	return [
@@ -29,23 +31,46 @@ export const meta: MetaFunction = () => {
 };
 
 export function loader({ context }: LoaderFunctionArgs) {
+	const menus: Menu[] = [
+		{
+			title: 'Docs',
+			links: [
+				{
+					title: 'Overview',
+					to: '/',
+				},
+			],
+		},
+		{
+			title: 'Useful links',
+			links: [
+				{
+					title: 'GitHub',
+					to: `https://github.com/${context.env.GITHUB_OWNER}/${context.env.GITHUB_REPO}`,
+				},
+				{
+					title: 'Remix docs',
+					to: 'https://remix.run/docs',
+				},
+				{
+					title: 'Cloudflare docs',
+					to: 'https://developers.cloudflare.com/pages',
+				},
+			],
+		},
+	];
+
 	return json({
-		repo: context.env.GITHUB_REPO,
-		owner: context.env.GITHUB_OWNER,
-		description: '📜 All-in-one remix starter template for Cloudflare Pages',
+		menus,
 	});
 }
 
 export default function App() {
-	const { repo, owner, description } = useLoaderData<typeof loader>();
+	const { menus } = useLoaderData<typeof loader>();
+
 	return (
 		<Document>
-			<Layout
-				title={repo}
-				description={description}
-				actionText="GitHub Repository"
-				actionLink={`https://github.com/${owner}/${repo}`}
-			>
+			<Layout menus={menus}>
 				<Outlet />
 			</Layout>
 		</Document>
@@ -76,65 +101,6 @@ function Document({
 	);
 }
 
-function Layout({
-	children,
-	title,
-	description,
-	actionText,
-	actionLink,
-}: {
-	children?: React.ReactNode;
-	title?: string;
-	description?: string;
-	actionText?: string;
-	actionLink?: string;
-}) {
-	return (
-		<div className="container mx-auto">
-			<div className="flex flex-col-reverse lg:flex-row">
-				<section
-					className={`relative flex-1 ${children ? 'border-t lg:border-t-0' : ''}`.trim()}
-				>
-					<div className="sticky top-0">
-						<div
-							className={`flex flex-col px-5 py-5 lg:px-10 lg:py-10 ${children ? 'lg:min-h-screen' : 'min-h-screen'}`.trim()}
-						>
-							<header className="py-4">
-								<Link to="/" title="Remix">
-									<RemixLogo />
-								</Link>
-							</header>
-							<div className="flex-1 py-10 lg:py-20">
-								<h2 className="text-xl">{title}</h2>
-								<p className="py-2">{description}</p>
-								{actionText ? (
-									<a
-										className="mt-2 inline-block border px-4 py-2 hover:border-black"
-										href={actionLink ?? '#'}
-									>
-										{actionText}
-									</a>
-								) : null}
-							</div>
-							<footer className="pt-8">
-								Wanna know more about Remix? Check out{' '}
-								<a className="underline" href="https://remix.guide">
-									Remix Guide
-								</a>
-							</footer>
-						</div>
-					</div>
-				</section>
-				{children ? (
-					<main className="flex-1">
-						<div className="px-5 py-5 lg:py-10">{children}</div>
-					</main>
-				) : null}
-			</div>
-		</div>
-	);
-}
-
 export function ErrorBoundary() {
 	const error = useRouteError();
 
@@ -161,14 +127,14 @@ export function ErrorBoundary() {
 
 		return (
 			<Document title={title}>
-				<Layout title={title} description={message} />
+				<ErrorLayout title={title} description={message} />
 			</Document>
 		);
 	}
 
 	return (
 		<Document title="Error!">
-			<Layout title="There was an error" description={`${error}`} />
+			<ErrorLayout title="There was an error" description={`${error}`} />
 		</Document>
 	);
 }
