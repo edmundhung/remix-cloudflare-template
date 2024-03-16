@@ -9,7 +9,7 @@ test('shows the package name', async ({ page }) => {
 
 	const title = page.getByRole('heading', {
 		name: 'remix-cloudflare-template',
-		level: 2,
+		level: 1,
 	});
 
 	await expect(title).toBeVisible();

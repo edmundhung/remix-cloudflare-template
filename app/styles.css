@@ -8,3 +8,10 @@
 summary.marker\:content-none::-webkit-details-marker {
 	display: none;
 }
+
+/**
+ * To prevent the background scrolling when the navigation overlay is opened
+ */
+html:has(details#breadcrumbs[open]) {
+	overflow: hidden;
+}

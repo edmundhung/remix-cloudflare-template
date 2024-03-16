@@ -2,7 +2,7 @@ import chevronUpIcon from '~/assets/chevron-up.svg';
 import chevronRightIcon from '~/assets/chevron-right.svg';
 import remixLetterLogo from '~/assets/remix-letter-light.svg';
 import { Link, useLocation } from '@remix-run/react';
-import { Fragment, useLayoutEffect, useRef } from 'react';
+import { Fragment, useEffect, useLayoutEffect, useRef } from 'react';
 
 export interface Menu {
 	title: string;
@@ -11,6 +11,9 @@ export interface Menu {
 		to: string;
 	}>;
 }
+
+export const useSafeLayoutEffect =
+	typeof document === 'undefined' ? useEffect : useLayoutEffect;
 
 export function Breadcrumbs({
 	locationKey,
@@ -23,7 +26,7 @@ export function Breadcrumbs({
 }) {
 	const detailsRef = useRef<HTMLDetailsElement>(null);
 
-	useLayoutEffect(() => {
+	useSafeLayoutEffect(() => {
 		if (detailsRef.current) {
 			detailsRef.current.open = false;
 		}
@@ -32,6 +35,7 @@ export function Breadcrumbs({
 	return (
 		<>
 			<details
+				id="breadcrumbs"
 				ref={detailsRef}
 				className="group peer h-12 border-t bg-white open:bg-neutral-100 hover:bg-neutral-100 lg:hidden"
 			>
@@ -62,7 +66,7 @@ export function Breadcrumbs({
 					</div>
 				</summary>
 			</details>
-			<div className="fixed inset-x-0 bottom-12 hidden max-h-[calc(100vh-3rem)] flex-1 overflow-y-auto border-t bg-white peer-open:block lg:relative lg:inset-x-auto lg:bottom-auto lg:flex lg:max-h-none">
+			<div className="fixed inset-x-0 bottom-12 top-0 hidden max-h-[calc(100vh-3rem)] flex-1 overflow-y-auto border-t bg-white peer-open:block lg:relative lg:inset-x-auto lg:bottom-auto lg:flex lg:max-h-none">
 				{children}
 			</div>
 		</>
