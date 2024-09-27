@@ -105,7 +105,7 @@ export function MainNavigation({ menus }: { menus: Menu[] }) {
 					</header>
 					<div className="-ml-5 flex-1 space-y-4 overflow-y-auto">
 						{menus.map(menu => (
-							<div key={menu.title} className="px-2 ">
+							<div key={menu.title} className="px-2">
 								<div className="sticky top-0 bg-white pb-2 pl-5 font-bold">
 									{menu.title}
 								</div>

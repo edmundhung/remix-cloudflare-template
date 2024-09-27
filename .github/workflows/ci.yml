@@ -11,7 +11,7 @@ jobs:
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
         with:
@@ -21,7 +21,7 @@ jobs:
       - name: 📦 Prepare the environment
         run: cp .dev.vars.example .dev.vars
       - name: 💣 Run some tests
-        run: npx playwright test
+        run: npm run test
 
   lint:
     name: ⬣ Linting
@@ -32,12 +32,12 @@ jobs:
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
       - name: ✨ Code format check
-        run: npx prettier --check .
+        run: npm run format -- --check .
       - name: ✅ Code linting
-        run: npx eslint . --ext .js,.mjs,.ts,.tsx
+        run: npm run lint

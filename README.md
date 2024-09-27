@@ -9,7 +9,12 @@ npx create-remix@latest --template edmundhung/remix-cloudflare-template
 What's included?
 
 - Development with [Vite](https://vitejs.dev)
-- [Github Actions](https://github.com/features/actions) for CI/CD
+- Hosting on [Cloudflare Workers](https://developers.cloudflare.com/workers/)
+  with [Static Assets](https://developers.cloudflare.com/workers/static-assets/)
+- [Github Actions](https://github.com/features/actions) for continuous
+  integration
+- Automatic builds and deployments with
+  [Workers Build](https://developers.cloudflare.com/workers/ci-cd/builds/)
 - [Markdoc](https://markdoc.dev) for rendering markdown
 - Styling with [Tailwind](https://tailwindcss.com/)
 - End-to-end testing with [Playwright](https://playwright.dev/)
@@ -86,7 +91,7 @@ You can generate the types of the `env` object based on `wrangler.toml` and
 `.dev.vars` with:
 
 ```sh
-npx wrangler types
+npm run typegen
 ```
 
 ## Deployment

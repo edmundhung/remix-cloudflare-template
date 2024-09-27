@@ -1,8 +1,19 @@
-name = "remix-cloudflare-template"
-compatibility_date = "2024-02-11"
-kv_namespaces = [
-  { binding = "cache", id = "cache" }
-]
+#:schema node_modules/wrangler/config-schema.json
+name = "template"
+main = "./server.ts"
+workers_dev = true
+
+# https://developers.cloudflare.com/workers/platform/compatibility-dates
+compatibility_date = "2024-09-26"
+
+kv_namespaces = [{ binding = "cache", id = "cache" }]
+
+[assets]
+# https://developers.cloudflare.com/workers/static-assets/binding/
+directory = "./build/client"
+
+[build]
+command = "npm run build"
 
 [vars]
 GITHUB_OWNER = "edmundhung"
