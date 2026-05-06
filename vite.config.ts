@@ -1,34 +1,25 @@
-import { defineConfig } from 'vite';
-import {
-	vitePlugin as remix,
-	cloudflareDevProxyVitePlugin,
-} from '@remix-run/dev';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import { getLoadContext } from './load-context';
+import { fileURLToPath } from 'node:url'
+
+import { cloudflare } from '@cloudflare/vite-plugin'
+import { defineConfig } from 'vite'
+
+const clientEntryPath = fileURLToPath(new URL('./app/assets/entry.ts', import.meta.url))
 
 export default defineConfig({
-	plugins: [
-		cloudflareDevProxyVitePlugin({
-			getLoadContext,
-		}),
-		remix({
-			future: {
-				v3_fetcherPersist: true,
-				v3_relativeSplatPath: true,
-				v3_throwAbortReason: true,
-			},
-		}),
-		tsconfigPaths(),
-	],
-	ssr: {
-		resolve: {
-			conditions: ['workerd', 'worker', 'browser'],
-		},
-	},
-	resolve: {
-		mainFields: ['browser', 'module', 'main'],
-	},
-	build: {
-		minify: true,
-	},
-});
+  environments: {
+    client: {
+      build: {
+        rollupOptions: {
+          input: {
+            clientEntry: clientEntryPath,
+          },
+          output: {
+            entryFileNames: 'assets/[name].js',
+            chunkFileNames: 'assets/[name]-[hash].js',
+          },
+        },
+      },
+    },
+  },
+  plugins: [cloudflare()],
+})
