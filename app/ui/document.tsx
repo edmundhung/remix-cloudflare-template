@@ -1,13 +1,12 @@
 import type { RemixNode } from 'remix/ui'
 
-import { routes } from '../routes.ts'
-
 export interface DocumentProps {
   children?: RemixNode
   title?: string
 }
 
 const DEFAULT_TITLE = decodeURIComponent('Remix%20Cloudflare%20Template')
+const CLIENT_ENTRY_SRC = import.meta.env.DEV ? '/app/assets/entry.ts' : '/assets/clientEntry.js'
 
 export function Document() {
   return ({ title = DEFAULT_TITLE, children }: DocumentProps) => (
@@ -19,7 +18,7 @@ export function Document() {
       </head>
       <body>
         {children}
-        <script type="module" src={routes.clientEntry.href()}></script>
+        <script type="module" src={CLIENT_ENTRY_SRC}></script>
       </body>
     </html>
   )

@@ -2,9 +2,8 @@
 import { css, type RemixNode } from 'remix/ui'
 
 import { PromptButton } from './prompt-button.tsx'
-import { routes } from '../routes.ts'
-
 const APP_DISPLAY_NAME = decodeURIComponent('Remix%20Cloudflare%20Template')
+const CLIENT_ENTRY_SRC = import.meta.env.DEV ? '/app/assets/entry.ts' : '/assets/clientEntry.js'
 
 const FONT_STACK =
   "'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace"
@@ -23,7 +22,7 @@ export function HomePage() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
         />
-        <script type="module" src={routes.clientEntry.href()}></script>
+        <script type="module" src={CLIENT_ENTRY_SRC}></script>
       </head>
       <body
         mix={css({
