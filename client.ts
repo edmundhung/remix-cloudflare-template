@@ -1,11 +1,10 @@
 import { run } from 'remix/ui'
 
-const clientModules = import.meta.glob(['../**/*.{ts,tsx}', '!../**/*.server.*'])
+const clientModules = import.meta.glob(['/app/**/*.{ts,tsx}', '!/app/**/*.server.*'])
 
 run({
   async loadModule(moduleUrl, exportName) {
-    let pathname = new URL(moduleUrl, location.origin).pathname
-    let load = clientModules[`..${pathname.slice('/app'.length)}`]
+    let load = clientModules[moduleUrl]
 
     if (!load) {
       throw new Error(`Unknown client entry module: ${moduleUrl}`)

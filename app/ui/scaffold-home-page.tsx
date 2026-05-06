@@ -3,7 +3,7 @@ import { css, type RemixNode } from 'remix/ui'
 
 import { PromptButton } from './prompt-button.tsx'
 const APP_DISPLAY_NAME = decodeURIComponent('Remix%20Cloudflare%20Template')
-const CLIENT_ENTRY_SRC = import.meta.env.DEV ? '/app/assets/entry.ts' : '/assets/clientEntry.js'
+const CLIENT_ENTRY_SRC = import.meta.env.DEV ? '/client.ts' : '/assets/client.js'
 
 const FONT_STACK =
   "'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace"

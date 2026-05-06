@@ -6,7 +6,7 @@ export interface DocumentProps {
 }
 
 const DEFAULT_TITLE = decodeURIComponent('Remix%20Cloudflare%20Template')
-const CLIENT_ENTRY_SRC = import.meta.env.DEV ? '/app/assets/entry.ts' : '/assets/clientEntry.js'
+const CLIENT_ENTRY_SRC = import.meta.env.DEV ? '/client.ts' : '/assets/client.js'
 
 export function Document() {
   return ({ title = DEFAULT_TITLE, children }: DocumentProps) => (
