@@ -6,7 +6,8 @@ This app was scaffolded with `remix new`. Use these conventions when continuing 
 
 ```sh
 npm i
-npm run start
+npm run dev
+npm run build
 npm test
 npm run typecheck
 ```
@@ -14,6 +15,10 @@ npm run typecheck
 ## Building Features
 
 Refer to ./agents/skills/remix/SKILL.md
+
+## Platform Features
+
+Refer to ./agents/skills/cloudflare/SKILL.md
 
 ## Starter Layout
 
