@@ -1,6 +1,6 @@
 # Remix Cloudflare Template
 
-A minimal Remix application starter with a home page and an auth page.
+A minimal Remix application starter with a home page and an auth page, configured for Cloudflare Workers deployment through the Cloudflare Vite plugin.
 
 ## Starter Shape
 
@@ -21,7 +21,7 @@ A minimal Remix application starter with a home page and an auth page.
 
 ```sh
 npm i
-npm run start
-npm test
-npm run typecheck
+npm run dev
+npm run preview
+npm run deploy
 ```

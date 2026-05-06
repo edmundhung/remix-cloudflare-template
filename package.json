@@ -3,8 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch server.ts",
-    "start": "tsx server.ts",
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite build && vite preview",
+    "deploy": "vite build && wrangler deploy",
     "test": "tsx --test",
     "typecheck": "tsc --noEmit"
   },
@@ -16,7 +18,10 @@
     "tsx": "latest"
   },
   "devDependencies": {
-    "@types/node": "latest",
-    "typescript": "latest"
+    "@cloudflare/vite-plugin": "^1",
+    "@types/node": "^24",
+    "typescript": "^6",
+    "vite": "^8",
+    "wrangler": "^4"
   }
 }

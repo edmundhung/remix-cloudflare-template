@@ -23,7 +23,7 @@ export function HomePage() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
         />
-        <script type="module" src={routes.assets.href({ path: 'app/assets/entry.ts' })}></script>
+        <script type="module" src={routes.clientEntry.href()}></script>
       </head>
       <body
         mix={css({
