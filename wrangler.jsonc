@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "remix-cloudflare-template",
+  "name": "template",
   "compatibility_date": "2026-05-05",
   "main": "./server.ts"
 }
