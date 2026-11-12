@@ -1,30 +1,17 @@
-// Delete this file and put your own home page in app/controllers/home.tsx
-import { css, type RemixNode } from 'remix/ui'
+// Delete this file and put your own home page in app/actions/controller.tsx
+import type { Handle, RemixNode } from 'remix/component'
+import { css } from 'remix/component'
 
-import { PromptButton } from './prompt-button.tsx'
-const APP_DISPLAY_NAME = decodeURIComponent('Remix%20Cloudflare%20Template')
-const CLIENT_ENTRY_SRC = import.meta.env.DEV ? '/client.ts' : '/assets/client.js'
+import { Document } from './document.tsx'
+import { PromptButton } from './public/prompt-button.tsx'
 
 const FONT_STACK =
   "'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace"
 
 export function HomePage() {
   return () => (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <meta name="color-scheme" content="light dark" />
-        <title>Welcome to {APP_DISPLAY_NAME}</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
-        />
-        <script type="module" src={CLIENT_ENTRY_SRC}></script>
-      </head>
-      <body
+    <Document head={<HomeHead />}>
+      <main
         mix={css({
           // Light-mode design tokens (default).
           '--surface-0': '#dee2e6',
@@ -57,7 +44,7 @@ export function HomePage() {
           justifyContent: 'center',
         })}
       >
-        <main
+        <div
           mix={css({
             width: '100%',
             maxWidth: '820px',
@@ -70,9 +57,22 @@ export function HomePage() {
           <Masthead />
           <Columns />
           <Footer />
-        </main>
-      </body>
-    </html>
+        </div>
+      </main>
+    </Document>
+  )
+}
+
+function HomeHead() {
+  return () => (
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      />
+    </>
   )
 }
 
@@ -132,8 +132,8 @@ function Columns() {
 
 function GetStartedCard() {
   return () => (
-    <div mix={css({ ...CARD_STYLES, flex: '0 0 auto' })}>
-      <h2 mix={css(CARD_HEADER_STYLES)}>Get started</h2>
+    <div mix={[cardStyle, css({ flex: '0 0 auto' })]}>
+      <h2 mix={cardHeaderStyle}>Get started</h2>
       <ul
         mix={css({
           listStyle: 'none',
@@ -146,7 +146,7 @@ function GetStartedCard() {
         })}
       >
         <li>
-          <CardLink href="https://remix.run/docs" icon={<AtomIcon />} label="Remix Docs" />
+          <CardLink href="https://docs.remix.run" icon={<AtomIcon />} label="Remix Docs" />
         </li>
         <li>
           <CardLink
@@ -163,14 +163,16 @@ function GetStartedCard() {
 function CodingWithAiCard() {
   return () => (
     <div
-      mix={css({
-        ...CARD_STYLES,
-        width: '540px',
-        justifyContent: 'center',
-        '@media (max-width: 720px)': { width: '100%' },
-      })}
+      mix={[
+        cardStyle,
+        css({
+          width: '540px',
+          justifyContent: 'center',
+          '@media (max-width: 720px)': { width: '100%' },
+        }),
+      ]}
     >
-      <h2 mix={css(CARD_HEADER_STYLES)}>Coding with AI?</h2>
+      <h2 mix={cardHeaderStyle}>Coding with AI?</h2>
       <div
         mix={css({
           width: '100%',
@@ -194,61 +196,68 @@ function CodingWithAiCard() {
         <PromptButton text="I want to build a simple headless Shopify store, what does Remix have available to help scaffold this?" />
         <PromptButton text="Add a sqlite database with a users table and scaffold a signup flow" />
         <PromptButton text="Make a copy to clipboard component that confirms to the user it was copied then resets after a few seconds" />
-        <PromptButton text="Add RMX-01 theme and a page with a remix/ui/select component and remix/ui/button variants" />
         <PromptButton text="Add compression middleware" />
       </div>
     </div>
   )
 }
 
-function CardLink() {
-  return ({ href, icon, label }: { href: string; icon: RemixNode; label: string }) => (
-    <a
-      href={href}
-      mix={css({
-        display: 'flex',
-        gap: '16px',
-        alignItems: 'center',
-        padding: '16px',
-        borderRadius: '12px',
-        color: 'var(--text-primary)',
-        textDecoration: 'none',
-        background: 'transparent',
-        transition: 'background-color 150ms ease, color 150ms ease',
-        '&:hover, &:focus-visible': {
-          background: 'var(--surface-4)',
-          color: 'var(--brand-blue)',
-          outline: 'none',
-        },
-      })}
-    >
-      <IconSlot>{icon}</IconSlot>
-      <span mix={css({ fontSize: '14px', lineHeight: 1.5, whiteSpace: 'nowrap' })}>{label}</span>
-    </a>
-  )
+function CardLink(handle: Handle<{ href: string; icon: RemixNode; label: string }>) {
+  return () => {
+    let { href, icon, label } = handle.props
+
+    return (
+      <a
+        href={href}
+        mix={css({
+          display: 'flex',
+          gap: '16px',
+          alignItems: 'center',
+          padding: '16px',
+          borderRadius: '12px',
+          color: 'var(--text-primary)',
+          textDecoration: 'none',
+          background: 'transparent',
+          transition: 'background-color 150ms ease, color 150ms ease',
+          '&:hover, &:focus-visible': {
+            background: 'var(--surface-4)',
+            color: 'var(--brand-blue)',
+            outline: 'none',
+          },
+        })}
+      >
+        <IconSlot>{icon}</IconSlot>
+        <span mix={css({ fontSize: '14px', lineHeight: 1.5, whiteSpace: 'nowrap' })}>{label}</span>
+      </a>
+    )
+  }
 }
 
-function IconSlot() {
-  return ({ children, rotated = false }: { children: RemixNode; rotated?: boolean }) => (
-    <span
-      aria-hidden="true"
-      mix={css({
-        flex: '0 0 24px',
-        width: '24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: rotated ? 'center' : 'flex-start',
-        '& svg': {
-          width: '20px',
-          height: '20px',
-          display: 'block',
-          ...(rotated ? { transform: 'rotate(180deg)' } : {}),
-        },
-      })}
-    >
-      {children}
-    </span>
-  )
+function IconSlot(handle: Handle<{ children: RemixNode; rotated?: boolean }>) {
+  return () => {
+    let { children, rotated = false } = handle.props
+
+    return (
+      <span
+        aria-hidden="true"
+        mix={css({
+          flex: '0 0 24px',
+          width: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: rotated ? 'center' : 'flex-start',
+          '& svg': {
+            width: '20px',
+            height: '20px',
+            display: 'block',
+            ...(rotated ? { transform: 'rotate(180deg)' } : {}),
+          },
+        })}
+      >
+        {children}
+      </span>
+    )
+  }
 }
 
 function Footer() {
@@ -331,7 +340,7 @@ function Footer() {
   )
 }
 
-const CARD_STYLES = {
+const cardStyle = css({
   background: 'var(--surface-3)',
   borderRadius: '20px',
   padding: '32px 16px 16px',
@@ -339,9 +348,9 @@ const CARD_STYLES = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '32px',
-} as const
+})
 
-const CARD_HEADER_STYLES = {
+const cardHeaderStyle = css({
   margin: 0,
   width: '100%',
   padding: '0 16px',
@@ -353,7 +362,7 @@ const CARD_HEADER_STYLES = {
   textTransform: 'uppercase',
   letterSpacing: '0.1em',
   color: 'var(--text-primary)',
-} as const
+})
 
 // ----- SVG icons -----
 // Inline so the page is fully self-contained with no external icon assets.

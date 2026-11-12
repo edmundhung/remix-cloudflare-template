@@ -1,20 +1,22 @@
 # Remix Cloudflare Template
 
-A minimal Remix application starter with a home page and an auth page, configured for Cloudflare Workers deployment through the Cloudflare Vite plugin.
+A minimal Remix application starter with a home page.
 
 ## Starter Shape
 
-- `app/controllers/home.tsx` owns the home page.
-- `app/controllers/auth.tsx` owns the auth page.
-- `app/routes.ts` defines the route contract.
-- `app/router.ts` wires routes to handlers.
-- `app/ui/` holds the shared document and layout wrappers.
-- `app/utils/render.tsx` centralizes HTML response rendering.
+- `app/actions/controller.tsx` owns the top-level route actions.
+- `app/actions/home-page.tsx` and `app/actions/document.tsx` render the route-owned starter UI.
+- `app/actions/public/` contains the browser runtime entry and interactive prompt button.
+- `app/routes.ts` defines the shared route contract used by server and browser modules for type-safe hrefs.
+- `app/router.ts` wires routes to handlers and installs the standard Remix component renderer used by actions.
+- `app/assets.ts` owns the server-side asset pipeline used by the asset route and render middleware.
+- Root `public/` contains static files served unchanged from the app root.
 
 ## Growing The App
 
-- Start with flat route files and only introduce route folders when a route needs multiple actions or route-owned modules.
-- Add directories like `app/data/`, `app/middleware/`, `public/`, or `test/` when the app actually needs them.
+- Put top-level route actions in `app/actions/controller.tsx`.
+- Add `app/actions/<route-key>/controller.tsx` when a nested route map needs its own actions or middleware.
+- Add directories like `app/data/` or `test/` when the app actually needs them.
 - Move shared UI into `app/ui/` once more than one route needs it.
 
 ## Commands
@@ -22,6 +24,8 @@ A minimal Remix application starter with a home page and an auth page, configure
 ```sh
 npm i
 npm run dev
-npm run preview
-npm run deploy
+npm run hmr
+npm run start
+npm test
+npm run typecheck
 ```
