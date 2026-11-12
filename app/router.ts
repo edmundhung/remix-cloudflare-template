@@ -1,10 +1,20 @@
-import { createRouter } from 'remix/fetch-router'
+import { createRouter, type RouterContext } from 'remix/router'
+import { render } from 'remix/middleware/render'
 
-import { auth } from './controllers/auth.tsx'
-import { home } from './controllers/home.tsx'
+import controller from './actions/controller.tsx'
+import { assets } from './assets.ts'
 import { routes } from './routes.ts'
 
-export const router = createRouter()
+export const router = createRouter({
+  middleware: [render({ assets })],
+})
 
-router.map(routes.home, home)
-router.map(routes.auth, auth)
+export type AppContext = RouterContext<typeof router>
+
+declare module 'remix' {
+  interface RouterTypes {
+    context: AppContext
+  }
+}
+
+router.map(routes, controller)
