@@ -1,34 +1,19 @@
-import {
-  detectMultipleImportMapSupport,
-  importModule,
-  preloadShim,
-} from 'remix/multiple-import-maps-polyfill'
 import { run } from 'remix/component'
 
-const app = run({
+// Modules in `public/` folders, keyed by the `/app/...` path that `clientEntry(import.meta.url, ...)`
+// becomes (see `vite.config.ts`). Vite builds each one into its own browser chunk.
+const modules = import.meta.glob<Record<string, unknown>>('/app/**/public/**/*.{ts,tsx}')
+
+run({
   async loadModule(moduleUrl, exportName) {
-    let mod = await importModule(moduleUrl)
-    let Component = mod[exportName]
+    let load = modules[moduleUrl]
+    if (!load) {
+      throw new Error(`Unknown client entry module: ${moduleUrl}. Move it into a public/ folder.`)
+    }
+    let Component = (await load())[exportName]
     if (typeof Component !== 'function') {
       throw new Error(`Unknown component: ${moduleUrl}#${exportName}`)
     }
     return Component
   },
-  async processClientEntryPreloads(preloads) {
-    if (await detectMultipleImportMapSupport()) return preloads
-
-    preloadShim(preloads)
-    return []
-  },
 })
-
-if (import.meta.hot) {
-  import.meta.hot.on('server:update', async () => {
-    try {
-      await app.ready()
-      await app.frames.top.reload()
-    } catch (error) {
-      console.error('Error reloading top frame on server update', error)
-    }
-  })
-}

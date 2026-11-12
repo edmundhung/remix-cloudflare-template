@@ -1,31 +1,17 @@
-import { createAssetServer } from 'remix/assets'
-import { componentHmr } from 'remix/component-hmr/assets'
+// Vite serves the browser entry from source in dev and builds it to `assets/entry.js`.
+// `import.meta.env` only exists under Vite, so code running in plain Node, like `npm test`, gets the
+// production path.
+export const scriptEntry = {
+  href: import.meta.env?.DEV ? '/app/actions/public/entry.ts' : '/assets/entry.js',
+  importMap: {},
+  preloads: [],
+}
 
-const rootDir = process.cwd()
-const nodeEnv = process.env.NODE_ENV ?? 'development'
-const isDevelopment = nodeEnv === 'development'
-const isProduction = nodeEnv === 'production'
-const isHmr = Boolean(isDevelopment && process.env.REMIX_NODE_HMR)
-
-export const assets = createAssetServer({
-  basePath: '/assets',
-  rootDir,
-  allowFiles: ['app/routes.ts', 'app/**/public/**'],
-  allowPackages: ['remix'],
-  denyFiles: ['app/**/*.test.*'],
-  sourceMaps: isDevelopment ? 'external' : undefined,
-  minify: !isDevelopment,
-  fingerprint: isProduction,
-  watch: isDevelopment,
-  hmr: isHmr
-    ? {
-        channel: async () => (await import('remix/node-hmr/runtime')).createBrowserHmrChannel(),
-        moduleImporter: 'remix/multiple-import-maps-polyfill',
-      }
-    : undefined,
-  scripts: { loaders: isHmr ? [componentHmr()] : undefined },
-})
-
-const entry = 'app/actions/public/entry.ts'
-
-export const scriptEntry = await assets.getScriptEntry(entry)
+// Under Vite, `vite.config.ts` turns `clientEntry(import.meta.url, ...)` into `/app/...` IDs, which
+// Remix uses as-is. Only code running without Vite, like `npm test`, still has `file:` IDs and
+// reaches this. No browser loads them there.
+export const assets = {
+  async getScriptEntry(fileUrl: string) {
+    return { href: fileUrl, importMap: { imports: {} }, preloads: [] }
+  },
+}
