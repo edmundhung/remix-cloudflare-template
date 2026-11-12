@@ -16,11 +16,11 @@ npm run deploy
 
 ## Migrating to Cloudflare
 
-This template replaces the default Remix Assets Server with a Vite-based setup that runs in the Cloudflare Workers runtime and produces the client build for deployment.
+This template replaces the Remix asset server with a Vite build, so the app runs in the Cloudflare Workers runtime and the browser code is built ahead of time.
 
-If you are comparing this template with the [official Remix template](https://github.com/remix-run/remix/tree/a077a838d91b95b081802f1765dd0e6a21d8d8d6/template), or migrating an app from that template to Cloudflare, here are the main changes.
+If you are comparing this template with the [official Remix template](https://github.com/remix-run/remix/tree/remix%403.2.0/template), or migrating an app from that template to Cloudflare, here are the main changes.
 
-### 1. Replace the Node server wrapper with a Worker entrypoint
+### 1. Replace the Node server with a Worker entrypoint
 
 Update [`./server.ts`](../server.ts) to export a `fetch()` handler:
 
@@ -39,48 +39,11 @@ export default {
 }
 ```
 
-Then create a `wrangler.jsonc` with `main: "./server.ts"`.
+Then create a [`wrangler.jsonc`](../wrangler.jsonc) with `main: "./server.ts"`, and delete `hmr.ts`.
 
-### 2. Move the client entry to the root and make it Vite-friendly
+### 2. Build the browser entry with Vite
 
-Move the browser entry to [`./client.ts`](../client.ts), then resolve app modules through `import.meta.glob(...)`. Vite automatically includes those client modules in both dev and production builds.
-
-```ts
-import { run } from 'remix/ui'
-
-const clientModules = import.meta.glob(['/app/**/*.{ts,tsx}', '!/app/**/*.server.*'])
-
-run({
-  async loadModule(moduleUrl, exportName) {
-    let load = clientModules[moduleUrl]
-
-    if (!load) {
-      throw new Error(`Unknown client entry module: ${moduleUrl}`)
-    }
-
-    let mod = await load()
-
-    if (!mod || typeof mod !== 'object') {
-      throw new Error(`Invalid client entry module: ${moduleUrl}`)
-    }
-
-    let entry = Reflect.get(mod, exportName)
-
-    if (typeof entry !== 'function') {
-      throw new Error(`Missing client entry export ${exportName} in ${moduleUrl}`)
-    }
-
-    return entry
-  },
-  async resolveFrame(src, signal, target) {
-    // ... no change here
-  },
-})
-```
-
-### 3. Configure Vite to build a client entry
-
-Add a `vite.config.ts` with `@cloudflare/vite-plugin`, then tell Vite to build `client.ts` to `assets/client.js`:
+Add a [`vite.config.ts`](../vite.config.ts) with `@cloudflare/vite-plugin`, and build `app/actions/public/entry.ts` to `assets/entry.js`:
 
 ```ts
 export default defineConfig({
@@ -88,22 +51,66 @@ export default defineConfig({
     client: {
       build: {
         rollupOptions: {
-          input: fileURLToPath(new URL('./client.ts', import.meta.url)),
+          input: fileURLToPath(new URL('./app/actions/public/entry.ts', import.meta.url)),
           output: {
-            entryFileNames: 'assets/client.js',
+            entryFileNames: 'assets/entry.js',
             chunkFileNames: 'assets/[name]-[hash].js',
           },
         },
       },
     },
   },
-  plugins: [cloudflare()],
+  plugins: [clientEntryIds(), cloudflare()],
 })
 ```
 
-Make sure the document script points to `/client.ts` in dev and `/assets/client.js` in production:
+Copy `clientEntryIds()` from [`vite.config.ts`](../vite.config.ts) too. In a deployed Worker, `import.meta.url` doesn't point at the component's source file, so the plugin rewrites `clientEntry(import.meta.url, ...)` to the component's path, for example `'/app/actions/public/prompt-button.tsx#PromptButton'`. Components keep using `import.meta.url` as in the Remix docs.
+
+### 3. Load client entries with `import.meta.glob()`
+
+In [`app/actions/public/entry.ts`](../app/actions/public/entry.ts), look up each client entry in an `import.meta.glob()` map instead of importing it by URL:
 
 ```ts
-const CLIENT_ENTRY_SRC = import.meta.env.DEV ? '/client.ts' : '/assets/client.js'
-<script type="module" src={CLIENT_ENTRY_SRC}></script>
+import { run } from 'remix/component'
+
+const modules = import.meta.glob<Record<string, unknown>>('/app/**/public/**/*.{ts,tsx}')
+
+run({
+  async loadModule(moduleUrl, exportName) {
+    let load = modules[moduleUrl]
+    if (!load) {
+      throw new Error(`Unknown client entry module: ${moduleUrl}. Move it into a public/ folder.`)
+    }
+    let Component = (await load())[exportName]
+    if (typeof Component !== 'function') {
+      throw new Error(`Unknown component: ${moduleUrl}#${exportName}`)
+    }
+    return Component
+  },
+})
 ```
+
+Only modules in `public/` folders, and what they import, reach the browser. Keep `clientEntry()` components there, as the official template already does.
+
+### 4. Replace the asset server
+
+Replace [`app/assets.ts`](../app/assets.ts) with a static script entry. Vite serves the source in dev and builds it to `assets/entry.js`:
+
+```ts
+export const scriptEntry = {
+  href: import.meta.env?.DEV ? '/app/actions/public/entry.ts' : '/assets/entry.js',
+  importMap: {},
+  preloads: [],
+}
+```
+
+Keep an `assets` export with a `getScriptEntry()` for `render({ assets })`. Only `npm test` reaches it, because tests run without Vite. Then remove the `assets` route from `app/routes.ts` and its action from `app/actions/controller.tsx`.
+
+### 5. Let Workers Assets serve `public/`
+
+Remove `staticFiles()` from [`app/router.ts`](../app/router.ts). Workers Assets serves `public/` and the built `assets/` files before requests reach the Worker.
+
+### 6. Update the project config
+
+- In [`tsconfig.json`](../tsconfig.json), replace `remix/assets/types/hmr` with `vite/client` in `types`.
+- In [`package.json`](../package.json), use the Vite and Wrangler scripts (`dev`, `build`, `preview`, `deploy`), and add `@cloudflare/vite-plugin`, `vite` and `wrangler` as dev dependencies.
